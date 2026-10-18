@@ -117,9 +117,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       font-weight: 800;
       color: var(--neon-cyan);
       font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .nav-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .nav-title {
@@ -160,6 +167,36 @@
     .hero-panel {
       text-align: center;
       padding: 12px 0 10px 0;
+    }
+
+    .avatar-halo {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 16px auto;
+      border-radius: 50%;
+      padding: 3px;
+      background: conic-gradient(from 180deg, var(--neon-cyan) 0%, var(--neon-gold) 50%, var(--neon-cyan) 100%);
+      box-shadow: 0 0 32px var(--neon-cyan-glow), 0 0 50px rgba(251, 191, 36, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #0d121d;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .hero-kicker {
@@ -643,7 +680,9 @@
     <!-- Header Navigation -->
     <nav class="nav-bar">
       <div class="nav-brand">
-        <div class="nav-logo">PL</div>
+        <div class="nav-logo">
+          <img src="logo.png" alt="PL" onerror="this.parentElement.innerHTML='PL'">
+        </div>
         <span class="nav-title">Prabhu <span>Labs</span></span>
       </div>
 
@@ -655,6 +694,12 @@
 
     <!-- Hero Identity -->
     <header class="hero-panel">
+      <div class="avatar-halo">
+        <div class="avatar-inner">
+          <img src="logo.png" alt="Prabhu Labs" onerror="this.style.display='none'">
+        </div>
+      </div>
+
       <div class="hero-kicker">EDGE ARCHITECTURE • TELEGRAM SYSTEMS</div>
       <h1 class="hero-title">Prabhu <span class="glow">Labs</span></h1>
       <p class="hero-desc">
