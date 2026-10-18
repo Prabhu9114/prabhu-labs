@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="google-site-verification" content="xOoDM76F_64NhVbLQSdbQ8vplj_5hRjWDnlX9agB4EY" />
 <title>Prabhu Labs • Systems & Edge Engineering</title>
 <meta name="description" content="Serverless Telegram distribution platforms, D1 SQL data aggregation, and MTProto cloud pipelines.">
 <meta property="og:title" content="Prabhu Labs — Hybrid Systems & Automation Showcase">
@@ -57,6 +58,8 @@ body.locked{overflow:hidden}
 .card-head h3{font-size:1.15rem;font-weight:700;margin-bottom:4px}
 .card-meta{font:600 .68rem 'JetBrains Mono',monospace;color:var(--c);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .tag-pill{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:1px 7px;border-radius:5px;color:var(--muted)}
+.tag-pill.clickable-pill{cursor:pointer;transition:all .2s ease}
+.tag-pill.clickable-pill:hover{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)}
 .card-arrow{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:.2s;flex-shrink:0}
 .sys-card:hover .card-arrow{background:var(--c);color:var(--bg);border-color:var(--c);transform:translateX(2px)}
 .card-desc{font-size:.86rem;color:var(--muted);line-height:1.5}
@@ -224,7 +227,13 @@ SYSTEMS.forEach(s => {
     <div class="card-topbar">
       <div class="card-head">
         <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">${s.icon}</svg></div>
-        <div><h3>${s.title}</h3><div class="card-meta"><span>${s.sub}</span><span class="tag-pill">${s.tag}</span></div></div>
+        <div>
+          <h3>${s.title}</h3>
+          <div class="card-meta">
+            <span>${s.sub}</span>
+            ${s.bot ? `<span class="tag-pill clickable-pill" data-tg="${s.bot}">${s.tag}</span>` : `<span class="tag-pill">${s.tag}</span>`}
+          </div>
+        </div>
       </div>
       <div class="card-arrow">${ARROW}</div>
     </div>
@@ -275,8 +284,15 @@ function closeDrawer(silent) {
 document.addEventListener('click', e => {
   const tgLink = e.target.closest('[data-tg]');
   if (tgLink) {
+    e.stopPropagation();
     haptic('impactOccurred', 'medium');
-    if (tg && tg.openTelegramLink) { e.preventDefault(); tg.openTelegramLink('https://t.me/' + tgLink.dataset.tg); }
+    const targetUrl = 'https://t.me/' + tgLink.dataset.tg;
+    if (tg && tg.openTelegramLink) {
+      e.preventDefault();
+      tg.openTelegramLink(targetUrl);
+    } else {
+      window.open(targetUrl, '_blank', 'noopener,noreferrer');
+    }
     return;
   }
   if (e.target.closest('[data-close]') || e.target.classList.contains('drawer-overlay')) return closeDrawer();
