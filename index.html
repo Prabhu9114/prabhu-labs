@@ -1,1220 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Prabhu Labs • Systems & Edge Engineering</title>
-
-  <!-- Telegram WebApp SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <!-- OpenGraph Metadata -->
-  <meta property="og:title" content="Prabhu Labs — Hybrid Systems & Automation Showcase">
-  <meta property="og:description" content="Serverless Telegram distribution platforms, D1 SQL data aggregation, and MTProto cloud pipelines.">
-  <meta name="theme-color" content="#07090e">
-
-  <!-- Typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg: #07090e;
-      --card-bg: rgba(13, 18, 29, 0.78);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --neon-cyan: #00f0ff;
-      --neon-cyan-glow: rgba(0, 240, 255, 0.35);
-      --neon-gold: #fbbf24;
-      --neon-gold-glow: rgba(251, 191, 36, 0.35);
-      --neon-lime: #a3e635;
-      --neon-lime-glow: rgba(163, 230, 53, 0.35);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-dim: #475569;
-      --glass-blur: blur(20px);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html, body {
-      background-color: var(--bg);
-      color: var(--text-main);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      min-height: 100vh;
-      min-height: 100dvh;
-      width: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
-      letter-spacing: -0.01em;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .bg-matrix {
-      position: fixed;
-      inset: 0;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-      background-size: 28px 28px;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.6;
-    }
-
-    .ambient-glow {
-      position: fixed;
-      top: -180px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 520px;
-      background: radial-gradient(circle, rgba(0, 240, 255, 0.12) 0%, rgba(251, 191, 36, 0.04) 45%, transparent 70%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .app-shell {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      max-width: 680px;
-      margin: 0 auto;
-      padding: max(24px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom)) 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-
-    .nav-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      backdrop-filter: var(--glass-blur);
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: var(--text-main);
-    }
-
-    .nav-logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 9px;
-      background: #0d121d;
-      border: 1px solid rgba(0, 240, 255, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      font-weight: 800;
-      color: var(--neon-cyan);
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .nav-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .nav-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-    }
-
-    .nav-title span { color: var(--neon-cyan); }
-
-    .status-badge {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--neon-lime);
-      background: rgba(163, 230, 53, 0.08);
-      border: 1px solid rgba(163, 230, 53, 0.25);
-      padding: 4px 10px;
-      border-radius: 999px;
-    }
-
-    .status-pulse {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--neon-lime);
-      box-shadow: 0 0 8px var(--neon-lime);
-      animation: pulseAnim 2s infinite ease-in-out;
-    }
-
-    @keyframes pulseAnim {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
-
-    .hero-panel {
-      text-align: center;
-      padding: 12px 0 10px 0;
-    }
-
-    .avatar-halo {
-      width: 96px;
-      height: 96px;
-      margin: 0 auto 16px auto;
-      border-radius: 50%;
-      padding: 3px;
-      background: conic-gradient(from 180deg, var(--neon-cyan) 0%, var(--neon-gold) 50%, var(--neon-cyan) 100%);
-      box-shadow: 0 0 32px var(--neon-cyan-glow), 0 0 50px rgba(251, 191, 36, 0.18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .avatar-inner {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: #0d121d;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .avatar-inner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .hero-kicker {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--neon-cyan);
-      margin-bottom: 8px;
-    }
-
-    .hero-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2.2rem, 5.5vw, 2.8rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1.1;
-      color: #ffffff;
-      margin-bottom: 10px;
-    }
-
-    .hero-title .glow {
-      color: var(--neon-cyan);
-      text-shadow: 0 0 24px var(--neon-cyan-glow);
-    }
-
-    .hero-desc {
-      font-size: clamp(0.86rem, 2.4vw, 0.95rem);
-      color: var(--text-muted);
-      line-height: 1.55;
-      max-width: 500px;
-      margin: 0 auto 16px auto;
-    }
-
-    .hero-cta-rack {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn-action {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 9px 18px;
-      border-radius: 12px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      text-decoration: none;
-      backdrop-filter: var(--glass-blur);
-      transition: all 0.2s ease;
-    }
-
-    .btn-action:hover {
-      background: rgba(0, 240, 255, 0.08);
-      border-color: rgba(0, 240, 255, 0.35);
-      color: #ffffff;
-      box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
-      transform: translateY(-1px);
-    }
-
-    .btn-action.primary {
-      background: var(--neon-cyan);
-      color: #07090e;
-      border-color: var(--neon-cyan);
-      font-weight: 700;
-    }
-
-    .btn-action.primary:hover {
-      background: #38f8ff;
-      box-shadow: 0 0 20px var(--neon-cyan-glow);
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-      margin-bottom: 12px;
-    }
-
-    .section-head h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      white-space: nowrap;
-    }
-
-    .section-head::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
-    }
-
-    .deck-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .sys-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: clamp(18px, 3.5vw, 24px);
-      backdrop-filter: var(--glass-blur);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .sys-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-    }
-
-    .sys-card:hover {
-      border-color: rgba(0, 240, 255, 0.4);
-      transform: translateY(-2px);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 24px var(--neon-cyan-glow);
-    }
-
-    .sys-card.gold:hover {
-      border-color: rgba(251, 191, 36, 0.45);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 24px var(--neon-gold-glow);
-    }
-
-    .sys-card.lime:hover {
-      border-color: rgba(163, 230, 53, 0.45);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 24px var(--neon-lime-glow);
-    }
-
-    .card-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .card-header-main {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      background: rgba(0, 240, 255, 0.1);
-      border: 1px solid rgba(0, 240, 255, 0.3);
-      color: var(--neon-cyan);
-    }
-
-    .sys-card.gold .card-icon {
-      background: rgba(251, 191, 36, 0.1);
-      border-color: rgba(251, 191, 36, 0.35);
-      color: var(--neon-gold);
-    }
-
-    .sys-card.lime .card-icon {
-      background: rgba(163, 230, 53, 0.1);
-      border-color: rgba(163, 230, 53, 0.35);
-      color: var(--neon-lime);
-    }
-
-    .card-titles h3 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .card-meta-tag {
-      font-size: 0.68rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 600;
-      color: var(--neon-cyan);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .sys-card.gold .card-meta-tag { color: var(--neon-gold); }
-    .sys-card.lime .card-meta-tag { color: var(--neon-lime); }
-
-    .tag-pill {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 1px 7px;
-      border-radius: 5px;
-      color: var(--text-muted);
-    }
-
-    .card-arrow {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      transition: all 0.2s ease;
-    }
-
-    .sys-card:hover .card-arrow {
-      background: var(--neon-cyan);
-      color: #07090e;
-      border-color: var(--neon-cyan);
-      transform: translateX(2px);
-    }
-
-    .sys-card.gold:hover .card-arrow {
-      background: var(--neon-gold);
-      color: #07090e;
-      border-color: var(--neon-gold);
-      transform: translateX(2px);
-    }
-
-    .sys-card.lime:hover .card-arrow {
-      background: var(--neon-lime);
-      color: #07090e;
-      border-color: var(--neon-lime);
-      transform: translateX(2px);
-    }
-
-    .card-desc {
-      font-size: 0.86rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .specs-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .spec-item {
-      background: rgba(255, 255, 255, 0.025);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 9px 12px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .spec-key {
-      font-size: 0.62rem;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .spec-val {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #ffffff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .pill-stack {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .pill-micro {
-      font-size: 0.68rem;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 3px 9px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      color: var(--text-muted);
-    }
-
-    .drawer-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(4, 7, 14, 0.88);
-      backdrop-filter: blur(18px);
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 0 12px 12px 12px;
-    }
-
-    .drawer-overlay.active { opacity: 1; pointer-events: auto; }
-
-    .drawer-card {
-      background: #0d121d;
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      width: 100%;
-      max-width: 580px;
-      padding: 24px;
-      box-shadow: 0 -16px 48px rgba(0, 0, 0, 0.85), 0 0 32px rgba(0, 240, 255, 0.1);
-      transform: translateY(100%);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-
-    .drawer-overlay.active .drawer-card { transform: translateY(0); }
-
-    .drawer-grip {
-      width: 40px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 999px;
-      margin: 0 auto 16px auto;
-    }
-
-    .drawer-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .drawer-top h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .drawer-top h2 span { color: var(--neon-cyan); }
-    .drawer-top h2 span.gold { color: var(--neon-gold); }
-    .drawer-top h2 span.lime { color: var(--neon-lime); }
-
-    .btn-close {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .btn-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
-
-    .bot-callout {
-      background: rgba(255, 255, 255, 0.025);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .bot-meta h5 { font-size: 0.88rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
-    .bot-meta p { font-size: 0.72rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
-
-    .btn-launch {
-      background: var(--neon-cyan);
-      color: #07090e;
-      border: none;
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 0.76rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-
-    .btn-launch:hover { box-shadow: 0 0 16px var(--neon-cyan-glow); transform: translateY(-1px); }
-    .btn-launch.gold { background: var(--neon-gold); }
-    .btn-launch.gold:hover { box-shadow: 0 0 16px var(--neon-gold-glow); }
-
-    .feature-step-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin: 16px 0;
-    }
-
-    .step-box {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 12px;
-      padding: 12px;
-    }
-
-    .step-num {
-      background: rgba(0, 240, 255, 0.1);
-      border: 1px solid rgba(0, 240, 255, 0.3);
-      color: var(--neon-cyan);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 6px;
-      border-radius: 6px;
-      line-height: 1;
-    }
-
-    .step-num.gold { background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.35); color: var(--neon-gold); }
-    .step-num.lime { background: rgba(163, 230, 53, 0.1); border-color: rgba(163, 230, 53, 0.35); color: var(--neon-lime); }
-
-    .step-text h4 { font-size: 0.86rem; color: #fff; font-weight: 700; margin-bottom: 3px; }
-    .step-text p { font-size: 0.76rem; color: var(--text-muted); line-height: 1.45; }
-
-    /* Web Dispatch Form Styles */
-    .dispatch-form {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      text-align: left;
-    }
-
-    .form-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .form-input, .form-textarea {
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 10px 14px;
-      color: #fff;
-      font-family: inherit;
-      font-size: 0.84rem;
-      outline: none;
-      transition: all 0.2s ease;
-    }
-
-    .form-input:focus, .form-textarea:focus {
-      border-color: var(--neon-cyan);
-      background: rgba(0, 240, 255, 0.04);
-      box-shadow: 0 0 12px var(--neon-cyan-glow);
-    }
-
-    .form-textarea {
-      resize: vertical;
-      min-height: 90px;
-    }
-
-    .btn-submit {
-      background: var(--neon-cyan);
-      color: #07090e;
-      border: none;
-      border-radius: 10px;
-      padding: 11px 16px;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.84rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .btn-submit:hover:not(:disabled) {
-      box-shadow: 0 0 20px var(--neon-cyan-glow);
-      transform: translateY(-1px);
-    }
-
-    .btn-submit:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-
-    .form-receipt {
-      display: none;
-      background: rgba(163, 230, 53, 0.08);
-      border: 1px solid rgba(163, 230, 53, 0.3);
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 12px;
-      text-align: left;
-    }
-
-    .form-receipt.error {
-      background: rgba(239, 68, 68, 0.08);
-      border-color: rgba(239, 68, 68, 0.35);
-    }
-
-    .receipt-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.86rem;
-      font-weight: 700;
-      color: var(--neon-lime);
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .form-receipt.error .receipt-title {
-      color: #f87171;
-    }
-
-    .receipt-desc {
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-    }
-
-    .receipt-ticket {
-      font-family: 'JetBrains Mono', monospace;
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-
-    .app-footer {
-      margin-top: 16px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .footer-copy { font-size: 0.74rem; color: var(--text-dim); }
-    .footer-edge { font-size: 0.74rem; color: var(--text-muted); }
-    .footer-edge span { color: var(--neon-cyan); font-weight: 600; }
-
-    @media (min-width: 880px) {
-      .app-shell { max-width: 840px; padding: 40px 24px 36px 24px; gap: 28px; }
-      .hero-title { font-size: 3rem; }
-      .specs-grid { grid-template-columns: repeat(4, 1fr); }
-      .drawer-overlay { align-items: center; padding: 24px; }
-      .drawer-card { border-radius: 28px; max-width: 680px; padding: 32px; transform: scale(0.95); }
-      .drawer-overlay.active .drawer-card { transform: scale(1); }
-      .drawer-grip { display: none; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prabhu Labs • Systems & Edge Engineering</title>
+<meta name="description" content="Serverless Telegram distribution platforms, D1 SQL data aggregation, and MTProto cloud pipelines.">
+<meta property="og:title" content="Prabhu Labs — Hybrid Systems & Automation Showcase">
+<meta property="og:description" content="Serverless Telegram distribution platforms, D1 SQL data aggregation, and MTProto cloud pipelines.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#07090e">
+<script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090e;--card-bg:rgba(13,18,29,.78);--line:rgba(255,255,255,.08);--cyan:#00f0ff;--gold:#fbbf24;--lime:#a3e635;--text:#f8fafc;--muted:#94a3b8;--dim:#7d8ba1;--blur:blur(20px)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',system-ui,sans-serif;min-height:100dvh;overflow-x:hidden;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.bg-matrix{position:fixed;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;opacity:.6}
+.ambient-glow{position:fixed;top:-180px;left:50%;transform:translateX(-50%);width:800px;height:520px;background:radial-gradient(circle,rgba(0,240,255,.12),rgba(251,191,36,.04) 45%,transparent 70%);pointer-events:none}
+.app-shell{position:relative;z-index:10;max-width:680px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:22px}
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;backdrop-filter:var(--blur)}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{width:32px;height:32px;border-radius:9px;background:#0d121d;border:1px solid rgba(0,240,255,.4);display:flex;align-items:center;justify-content:center;overflow:hidden;font:800 .8rem 'Space Grotesk',sans-serif;color:var(--cyan)}
+.nav-logo img,.avatar-inner img{width:100%;height:100%;object-fit:cover}
+.nav-title{font:700 .95rem 'Space Grotesk',sans-serif}.nav-title span{color:var(--cyan)}
+.status-badge{display:flex;align-items:center;gap:7px;font:.65rem 'JetBrains Mono',monospace;color:var(--lime);background:rgba(163,230,53,.08);border:1px solid rgba(163,230,53,.25);padding:4px 10px;border-radius:999px}
+.status-pulse{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px var(--lime);animation:pulse 2s infinite ease-in-out}
+@keyframes pulse{50%{opacity:.4;transform:scale(.85)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
+.hero-panel{text-align:center;padding:12px 0 10px}
+.avatar-halo{width:96px;height:96px;margin:0 auto 16px;border-radius:50%;padding:3px;background:conic-gradient(from 180deg,var(--cyan),var(--gold),var(--cyan));box-shadow:0 0 32px rgba(0,240,255,.35),0 0 50px rgba(251,191,36,.18)}
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:#0d121d;overflow:hidden}
+.hero-kicker{font:700 .72rem 'Space Grotesk',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+.hero-title{font:800 clamp(2.2rem,5.5vw,3rem)/1.1 'Space Grotesk',sans-serif;letter-spacing:-.04em;margin-bottom:10px}
+.hero-title .glow{color:var(--cyan);text-shadow:0 0 24px rgba(0,240,255,.35)}
+.hero-desc{font-size:clamp(.86rem,2.4vw,.95rem);color:var(--muted);line-height:1.55;max-width:500px;margin:0 auto 16px}
+.hero-cta-rack{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.btn-action{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--text);padding:9px 18px;border-radius:12px;font:600 .78rem inherit;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:.2s}
+.btn-action:hover{background:rgba(0,240,255,.08);border-color:rgba(0,240,255,.35);box-shadow:0 0 16px rgba(0,240,255,.2);transform:translateY(-1px)}
+.btn-action.primary{background:var(--cyan);color:var(--bg);border-color:var(--cyan);font-weight:700}
+.section-head{display:flex;align-items:center;gap:10px;margin:10px 0 12px}
+.section-head h2{font:700 .78rem 'Space Grotesk',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.section-head::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.1),transparent)}
+.deck{display:flex;flex-direction:column;gap:16px}
+.sys-card{--c:var(--cyan);--g:rgba(0,240,255,.35);--t:rgba(0,240,255,.1);background:var(--card-bg);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,3.5vw,24px);backdrop-filter:var(--blur);display:flex;flex-direction:column;gap:14px;cursor:pointer;position:relative;overflow:hidden;transition:.25s cubic-bezier(.16,1,.3,1)}
+.sys-card.gold{--c:var(--gold);--g:rgba(251,191,36,.35);--t:rgba(251,191,36,.1)}
+.sys-card.lime{--c:var(--lime);--g:rgba(163,230,53,.35);--t:rgba(163,230,53,.1)}
+.sys-card:hover{border-color:var(--c);transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 24px var(--g)}
+.card-topbar,.card-head{display:flex;align-items:center;gap:12px}
+.card-topbar{justify-content:space-between}
+.card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--t);border:1px solid var(--c);color:var(--c)}
+.card-head h3{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.card-meta{font:600 .68rem 'JetBrains Mono',monospace;color:var(--c);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tag-pill{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:1px 7px;border-radius:5px;color:var(--muted)}
+.card-arrow{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:.2s;flex-shrink:0}
+.sys-card:hover .card-arrow{background:var(--c);color:var(--bg);border-color:var(--c);transform:translateX(2px)}
+.card-desc{font-size:.86rem;color:var(--muted);line-height:1.5}
+.specs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.spec-item{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);padding:9px 12px;border-radius:10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.spec-key{font:.62rem 'JetBrains Mono',monospace;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+.spec-val{font-size:.82rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill-stack{display:flex;flex-wrap:wrap;gap:6px}
+.pill-micro{font:.68rem 'JetBrains Mono',monospace;padding:3px 9px;border-radius:6px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);color:var(--muted)}
+.drawer-overlay{position:fixed;inset:0;background:rgba(4,7,14,.88);z-index:100;opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s;display:flex;align-items:flex-end;justify-content:center;padding:0 12px 12px}
+.drawer-overlay.active{opacity:1;visibility:visible;transition-delay:0s;backdrop-filter:blur(18px)}
+.drawer-card{--c:var(--cyan);--g:rgba(0,240,255,.35);--t:rgba(0,240,255,.1);background:#0d121d;border:1px solid var(--line);border-radius:24px;width:100%;max-width:580px;padding:24px;box-shadow:0 -16px 48px rgba(0,0,0,.85);transform:translateY(100%);transition:transform .35s cubic-bezier(.16,1,.3,1);max-height:85dvh;overflow-y:auto;overscroll-behavior:contain}
+.drawer-card.gold{--c:var(--gold);--g:rgba(251,191,36,.35);--t:rgba(251,191,36,.1)}
+.drawer-card.lime{--c:var(--lime);--g:rgba(163,230,53,.35);--t:rgba(163,230,53,.1)}
+.drawer-overlay.active .drawer-card{transform:none}
+.drawer-grip{width:40px;height:4px;background:rgba(255,255,255,.2);border-radius:999px;margin:0 auto 16px}
+.drawer-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.drawer-top h2{font:700 1.25rem 'Space Grotesk',sans-serif}.drawer-top h2 span{color:var(--c)}
+.btn-close{background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem}
+.btn-close:hover{background:rgba(255,255,255,.12);color:#fff}
+.bot-callout{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+.bot-callout h5{font-size:.88rem;margin-bottom:2px}.bot-callout p{font:.72rem 'JetBrains Mono',monospace;color:var(--muted)}
+.btn-launch{background:var(--c);color:var(--bg);padding:7px 14px;border-radius:8px;font-size:.76rem;font-weight:700;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap;transition:.2s}
+.btn-launch:hover{box-shadow:0 0 16px var(--g);transform:translateY(-1px)}
+.steps{display:flex;flex-direction:column;gap:10px;margin:16px 0;list-style:none}
+.step{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px}
+.step-num{background:var(--t);border:1px solid var(--c);color:var(--c);font:700 .72rem 'JetBrains Mono',monospace;padding:3px 6px;border-radius:6px;line-height:1}
+.step h4{font-size:.86rem;margin-bottom:3px}.step p{font-size:.76rem;color:var(--muted);line-height:1.45}
+.about-p{font-size:.84rem;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.dispatch-form{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font:600 .68rem 'JetBrains Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.form-input,.form-textarea{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font:.84rem inherit;font-family:inherit;outline:none;transition:.2s}
+.form-input:focus,.form-textarea:focus{border-color:var(--cyan);background:rgba(0,240,255,.04);box-shadow:0 0 12px rgba(0,240,255,.35)}
+.form-textarea{resize:vertical;min-height:90px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.btn-submit{background:var(--cyan);color:var(--bg);border:0;border-radius:10px;padding:11px 16px;font:700 .84rem 'Space Grotesk',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+.btn-submit:hover:not(:disabled){box-shadow:0 0 20px rgba(0,240,255,.35);transform:translateY(-1px)}
+.btn-submit:disabled{opacity:.55;cursor:not-allowed}
+.form-receipt{display:none;background:rgba(163,230,53,.08);border:1px solid rgba(163,230,53,.3);border-radius:12px;padding:14px;margin-top:12px}
+.form-receipt.error{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.35)}
+.receipt-title{font:700 .86rem 'Space Grotesk',sans-serif;color:var(--lime);margin-bottom:4px}
+.form-receipt.error .receipt-title{color:#f87171}
+.receipt-desc{font-size:.76rem;color:var(--muted);line-height:1.45}
+.receipt-ticket{font-family:'JetBrains Mono',monospace;color:#fff;background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px}
+.app-footer{margin-top:16px;text-align:center;display:flex;flex-direction:column;gap:4px;font-size:.74rem;color:var(--dim)}
+.app-footer span{color:var(--cyan);font-weight:600}
+@media(min-width:880px){.app-shell{max-width:840px;padding:40px 24px 36px;gap:28px}.specs-grid{grid-template-columns:repeat(4,1fr)}.drawer-overlay{align-items:center;padding:24px}.drawer-card{border-radius:28px;max-width:680px;padding:32px;transform:scale(.95)}.drawer-grip{display:none}}
+</style>
 </head>
 <body>
-  <div class="bg-matrix"></div>
-  <div class="ambient-glow"></div>
+<div class="bg-matrix" aria-hidden="true"></div>
+<div class="ambient-glow" aria-hidden="true"></div>
 
-  <main class="app-shell">
-    <!-- Header Navigation -->
-    <nav class="nav-bar">
-      <div class="nav-brand">
-        <div class="nav-logo">
-          <img src="logo.png" alt="PL" onerror="this.parentElement.innerHTML='PL'">
-        </div>
-        <span class="nav-title">Prabhu <span>Labs</span></span>
+<main class="app-shell">
+  <nav class="nav-bar" aria-label="Site">
+    <div class="nav-brand">
+      <div class="nav-logo"><img src="logo.png" alt="" onerror="this.parentElement.textContent='PL'"></div>
+      <span class="nav-title">Prabhu <span>Labs</span></span>
+    </div>
+    <div class="status-badge" role="status"><span class="status-pulse"></span><span>EDGE CLUSTER LIVE</span></div>
+  </nav>
+
+  <header class="hero-panel">
+    <div class="avatar-halo"><div class="avatar-inner"><img src="logo.png" alt="Prabhu Labs logo" onerror="this.style.display='none'"></div></div>
+    <div class="hero-kicker">EDGE ARCHITECTURE • TELEGRAM SYSTEMS</div>
+    <h1 class="hero-title">Prabhu <span class="glow">Labs</span></h1>
+    <p class="hero-desc">Serverless Telegram distribution platforms, D1 SQL audience pipelines, and automated MTProto engines running on edge and cloud compute.</p>
+    <div class="hero-cta-rack">
+      <button class="btn-action primary" data-open="desk">Admin Concierge Desk</button>
+      <button class="btn-action" data-open="about">Builder Dossier</button>
+    </div>
+  </header>
+
+  <section aria-labelledby="deploy-h">
+    <div class="section-head"><h2 id="deploy-h">Engineered Deployments</h2></div>
+    <div class="deck" id="deck"></div>
+  </section>
+
+  <footer class="app-footer">
+    <div>© 2026 Prabhu Labs • All rights reserved</div>
+    <div>Production infrastructure: <span>Cloudflare Edge V8</span></div>
+  </footer>
+</main>
+
+<div id="drawers"></div>
+
+<div class="drawer-overlay" id="drawer-desk" role="dialog" aria-modal="true" aria-labelledby="t-desk" inert>
+  <div class="drawer-card">
+    <div class="drawer-grip"></div>
+    <div class="drawer-top"><h2 id="t-desk">Admin <span>Concierge Desk</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
+    <div class="bot-callout">
+      <div><h5>JoinLinks Hub Sentinel</h5><p>@JoinLinks_hub_bot • Relay Gateway</p></div>
+      <a href="https://t.me/JoinLinks_hub_bot" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="JoinLinks_hub_bot">Open Telegram</a>
+    </div>
+    <form class="dispatch-form" id="concierge-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="contact-input">Contact</label>
+        <input type="text" id="contact-input" class="form-input" placeholder="@telegram_handle or user@email.com" maxlength="120" autocomplete="off" required>
       </div>
-
-      <div class="status-badge">
-        <span class="status-pulse"></span>
-        <span>EDGE CLUSTER LIVE</span>
+      <div class="form-group">
+        <label class="form-label" for="message-input">Message</label>
+        <textarea id="message-input" class="form-textarea" placeholder="Describe your inquiry, proposal, or systems request..." maxlength="1500" required></textarea>
       </div>
-    </nav>
-
-    <!-- Hero Identity -->
-    <header class="hero-panel">
-      <div class="avatar-halo">
-        <div class="avatar-inner">
-          <img src="logo.png" alt="Prabhu Labs" onerror="this.style.display='none'">
-        </div>
-      </div>
-
-      <div class="hero-kicker">EDGE ARCHITECTURE • TELEGRAM SYSTEMS</div>
-      <h1 class="hero-title">Prabhu <span class="glow">Labs</span></h1>
-      <p class="hero-desc">
-        Serverless Telegram distribution platforms, D1 SQL audience pipelines, and automated MTProto engines running entirely on edge and cloud compute.
-      </p>
-
-      <div class="hero-cta-rack">
-        <button class="btn-action primary" id="open-desk-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <span>Admin Concierge Desk</span>
-        </button>
-
-        <button class="btn-action" id="open-about-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <span>Builder Dossier</span>
-        </button>
-      </div>
-    </header>
-
-    <!-- Systems Deck -->
-    <section>
-      <div class="section-head">
-        <h2>Engineered Deployments</h2>
-      </div>
-
-      <div class="deck-container">
-        <!-- SYSTEM 1: OmniPost Cloud -->
-        <article class="sys-card" id="card-omnipost">
-          <div class="card-topbar">
-            <div class="card-header-main">
-              <div class="card-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="m13 13 3-3-3-3"/><path d="M16 10H8"/></svg>
-              </div>
-              <div class="card-titles">
-                <h3>OmniPost Cloud</h3>
-                <div class="card-meta-tag">
-                  <span>Serverless Fanout</span>
-                  <span class="tag-pill">@OmniPost_Cloud_bot</span>
-                </div>
-              </div>
-            </div>
-            <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></div>
-          </div>
-
-          <p class="card-desc">
-            Automated multi-tenant Telegram channel fanout engine. Duplicates posts across 10 destination channels via edge cron triggers with rate-limit dampening.
-          </p>
-
-          <div class="specs-grid">
-            <div class="spec-item"><span class="spec-key">Live Gateway</span><span class="spec-val">@OmniPost_Cloud_bot</span></div>
-            <div class="spec-item"><span class="spec-key">Fanout Ratio</span><span class="spec-val">1 In ➔ 10 Out</span></div>
-            <div class="spec-item"><span class="spec-key">Compute Core</span><span class="spec-val">Workers + KV</span></div>
-            <div class="spec-item"><span class="spec-key">Discovery</span><span class="spec-val">Zero-Config Webhook</span></div>
-          </div>
-
-          <div class="pill-stack">
-            <span class="pill-micro">Cloudflare Workers</span>
-            <span class="pill-micro">Workers KV</span>
-            <span class="pill-micro">Telegram Bot API</span>
-            <span class="pill-micro">Cron Scheduling</span>
-            <span class="pill-micro">Tenant RBAC</span>
-          </div>
-        </article>
-
-        <!-- SYSTEM 2: TeleGrowth Engine -->
-        <article class="sys-card gold" id="card-growth">
-          <div class="card-topbar">
-            <div class="card-header-main">
-              <div class="card-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
-              </div>
-              <div class="card-titles">
-                <h3>TeleGrowth Engine</h3>
-                <div class="card-meta-tag">
-                  <span>Audience Engine</span>
-                  <span class="tag-pill">@Quick_Join_Bot</span>
-                </div>
-              </div>
-            </div>
-            <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></div>
-          </div>
-
-          <p class="card-desc">
-            High-scale join request approval gateway with instant edge webhooks, interactive verification hooks, and central D1 SQL audience aggregation.
-          </p>
-
-          <div class="specs-grid">
-            <div class="spec-item"><span class="spec-key">Live Gateway</span><span class="spec-val">@Quick_Join_Bot</span></div>
-            <div class="spec-item"><span class="spec-key">Approval Latency</span><span class="spec-val">&lt; 1.0s Edge</span></div>
-            <div class="spec-item"><span class="spec-key">Database Layer</span><span class="spec-val">Cloudflare D1 (SQL)</span></div>
-            <div class="spec-item"><span class="spec-key">Conversion Hook</span><span class="spec-val">can_dm = 1</span></div>
-          </div>
-
-          <div class="pill-stack">
-            <span class="pill-micro">Cloudflare D1</span>
-            <span class="pill-micro">Fast Webhooks</span>
-            <span class="pill-micro">Inline Keyboards</span>
-            <span class="pill-micro">Retention Loops</span>
-            <span class="pill-micro">Reactions Engine</span>
-          </div>
-        </article>
-
-        <!-- SYSTEM 3: Command Center v5.0 -->
-        <article class="sys-card lime" id="card-cmd">
-          <div class="card-topbar">
-            <div class="card-header-main">
-              <div class="card-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-              </div>
-              <div class="card-titles">
-                <h3>Command Center v5.0</h3>
-                <div class="card-meta-tag">
-                  <span>MTProto Automation</span>
-                  <span class="tag-pill">Telethon Core</span>
-                </div>
-              </div>
-            </div>
-            <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></div>
-          </div>
-
-          <p class="card-desc">
-            Production-grade MTProto automation suite for high-volume content operations. Automates multi-source feeds, link conversions, and staggered scheduling.
-          </p>
-
-          <div class="specs-grid">
-            <div class="spec-item"><span class="spec-key">Engine Core</span><span class="spec-val">Telethon Async</span></div>
-            <div class="spec-item"><span class="spec-key">Queue Stagger</span><span class="spec-val">100-Post Safe Slot</span></div>
-            <div class="spec-item"><span class="spec-key">Bridge Converter</span><span class="spec-val">TeraBox & Diskwala</span></div>
-            <div class="spec-item"><span class="spec-key">Disaster Recovery</span><span class="spec-val">Encrypted Log Sync</span></div>
-          </div>
-
-          <div class="pill-stack">
-            <span class="pill-micro">Python 3</span>
-            <span class="pill-micro">Telethon Async</span>
-            <span class="pill-micro">Linux CLI</span>
-            <span class="pill-micro">Diskwala API</span>
-            <span class="pill-micro">State Mirroring</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="app-footer">
-      <div class="footer-copy">© 2026 Prabhu Labs • All rights reserved</div>
-      <div class="footer-edge">Production Infrastructure: <span>Cloudflare Edge V8</span></div>
-    </footer>
-  </main>
-
-  <!-- Drawers -->
-  <div class="drawer-overlay" id="drawer-omnipost">
-    <div class="drawer-card">
-      <div class="drawer-grip"></div>
-      <div class="drawer-top">
-        <h2>OmniPost <span>Cloud Architecture</span></h2>
-        <button class="btn-close" id="close-omnipost">✕</button>
-      </div>
-      <div class="bot-callout">
-        <div class="bot-meta">
-          <h5>OmniPost Cloud Bot</h5>
-          <p>@OmniPost_Cloud_bot • Multi-Tenant Fanout</p>
-        </div>
-        <a href="https://t.me/OmniPost_Cloud_bot" target="_blank" class="btn-launch" id="launch-omnipost">
-          <span>Launch Bot</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-        </a>
-      </div>
-      <div class="feature-step-list">
-        <div class="step-box"><div class="step-num">01</div><div class="step-text"><h4>Batch Dispatch</h4><p>Distributes source content to up to 10 channels with dynamic rate-limiting to prevent flood waits.</p></div></div>
-        <div class="step-box"><div class="step-num">02</div><div class="step-text"><h4>Webhook Channel Discovery</h4><p>Auto-detects bot administrator appointments without requiring manual Chat ID inputs.</p></div></div>
-        <div class="step-box"><div class="step-num">03</div><div class="step-text"><h4>Workers KV State</h4><p>Maintains tenant queues with global edge replication and low retrieval latencies.</p></div></div>
-      </div>
+      <input type="text" name="website" id="hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" class="btn-submit" id="submit-btn">Send message</button>
+    </form>
+    <div class="form-receipt" id="form-receipt" role="status" aria-live="polite">
+      <div class="receipt-title" id="receipt-title"></div>
+      <p class="receipt-desc" id="receipt-desc"></p>
     </div>
   </div>
+</div>
 
-  <div class="drawer-overlay" id="drawer-growth">
-    <div class="drawer-card">
-      <div class="drawer-grip"></div>
-      <div class="drawer-top">
-        <h2>TeleGrowth <span class="gold">Engine Architecture</span></h2>
-        <button class="btn-close" id="close-growth">✕</button>
-      </div>
-      <div class="bot-callout">
-        <div class="bot-meta">
-          <h5>Quick Join Master Bot</h5>
-          <p>@Quick_Join_Bot • Fast Approval Gateway</p>
-        </div>
-        <a href="https://t.me/Quick_Join_Bot" target="_blank" class="btn-launch gold" id="launch-growth">
-          <span>Launch Bot</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-        </a>
-      </div>
-      <div class="feature-step-list">
-        <div class="step-box"><div class="step-num gold">01</div><div class="step-text"><h4>Sub-Second Approval</h4><p>Processes join requests in milliseconds via Cloudflare Workers webhooks.</p></div></div>
-        <div class="step-box"><div class="step-num gold">02</div><div class="step-text"><h4>Verification Hook</h4><p>Interactive challenge initiates two-way user DM access (<code>can_dm = 1</code>).</p></div></div>
-        <div class="step-box"><div class="step-num gold">03</div><div class="step-text"><h4>Central D1 SQL Ledger</h4><p>Stores unified subscriber records in SQLite at the edge.</p></div></div>
-      </div>
-    </div>
+<div class="drawer-overlay" id="drawer-about" role="dialog" aria-modal="true" aria-labelledby="t-about" inert>
+  <div class="drawer-card">
+    <div class="drawer-grip"></div>
+    <div class="drawer-top"><h2 id="t-about">Builder <span>Dossier</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
+    <p class="about-p"><strong>Self-directed systems developer specializing in Telegram platforms and serverless edge computing.</strong></p>
+    <p class="about-p">Combining AI reasoning with <strong>Cloudflare's edge ecosystem</strong> (Pages, Workers, D1 SQL, KV) and <strong>Python / Telethon MTProto pipelines</strong> to run automation systems with no server upkeep.</p>
+    <div class="pill-stack"><span class="pill-micro">Cloudflare Workers</span><span class="pill-micro">Cloudflare D1 SQL</span><span class="pill-micro">Linux CLI</span><span class="pill-micro">MTProto Telethon</span></div>
   </div>
+</div>
 
-  <div class="drawer-overlay" id="drawer-cmd">
-    <div class="drawer-card">
-      <div class="drawer-grip"></div>
-      <div class="drawer-top">
-        <h2>Command Center <span class="lime">v5.0 Architecture</span></h2>
-        <button class="btn-close" id="close-cmd">✕</button>
+<script>
+const tg = window.Telegram && Telegram.WebApp;
+const haptic = (kind, v) => { try { tg && tg.HapticFeedback && tg.HapticFeedback[kind](v); } catch (_) {} };
+
+if (tg) {
+  tg.ready(); tg.expand();
+  try { tg.setHeaderColor('#07090e'); tg.setBackgroundColor('#07090e'); } catch (_) {}
+}
+
+const ARROW = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+const EXT = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>';
+const SYSTEMS = [
+  { id: 'omnipost', cls: '', title: 'OmniPost Cloud', sub: 'Serverless Fanout', tag: '@OmniPost_Cloud_bot', bot: 'OmniPost_Cloud_bot',
+    icon: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="m13 13 3-3-3-3"/><path d="M16 10H8"/>',
+    desc: 'Multi-tenant Telegram channel fanout engine. Copies sequential post batches from a source channel to each destination, with per-channel pointers and rate-limit pacing.',
+    specs: [['Live Gateway', '@OmniPost_Cloud_bot'], ['Fanout', '1 source ➔ 5 channels'], ['Compute Core', 'Workers + KV'], ['Discovery', 'Zero-Config Webhook']],
+    pills: ['Cloudflare Workers', 'Workers KV', 'Telegram Bot API', 'Dispatch Loop', 'Tenant RBAC'],
+    dTitle: ['OmniPost', 'Cloud Architecture'], dBot: ['OmniPost Cloud Bot', '@OmniPost_Cloud_bot • Multi-Tenant Fanout', 'Launch Bot'],
+    steps: [['Batch Dispatch', 'Sends each destination its own block of posts, paced to avoid flood waits.'], ['Webhook Channel Discovery', 'Detects when the bot is made admin, so no manual Chat IDs are needed.'], ['Workers KV State', 'Keeps tenant pointers and access flags at the edge, looping back to the start when the source ends.']] },
+  { id: 'growth', cls: 'gold', title: 'TeleGrowth Engine', sub: 'Audience Engine', tag: '@Quick_Join_Bot', bot: 'Quick_Join_Bot',
+    icon: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>',
+    desc: 'Join-request approval gateway with instant edge webhooks, interactive verification, and central D1 SQL audience records.',
+    specs: [['Live Gateway', '@Quick_Join_Bot'], ['Approval', 'Edge webhook'], ['Database', 'Cloudflare D1 (SQL)'], ['DM Flag', 'can_dm = 1']],
+    pills: ['Cloudflare D1', 'Fast Webhooks', 'Inline Keyboards', 'Retention Loops', 'Reactions Engine'],
+    dTitle: ['TeleGrowth', 'Engine Architecture'], dBot: ['Quick Join Master Bot', '@Quick_Join_Bot • Fast Approval Gateway', 'Launch Bot'],
+    steps: [['Fast Approval', 'Handles join requests through Cloudflare Workers webhooks.'], ['Verification Hook', 'An interactive challenge opens a two-way DM and sets the can_dm flag in the database.'], ['Central D1 SQL Ledger', 'Stores unified subscriber records in SQLite at the edge.']] },
+  { id: 'cmd', cls: 'lime', title: 'Command Center v5.0', sub: 'MTProto Automation', tag: 'Telethon Core', bot: null,
+    icon: '<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>',
+    desc: 'MTProto automation suite for high-volume content operations: multi-source feeds, link conversion, and staggered scheduling.',
+    specs: [['Engine Core', 'Telethon Async'], ['Queue Stagger', '100-Post Safe Slot'], ['Link Converter', 'TeraBox & Diskwala'], ['Recovery', 'Encrypted Log Sync']],
+    pills: ['Python 3', 'Telethon Async', 'Linux CLI', 'Diskwala API', 'State Mirroring'],
+    dTitle: ['Command Center', 'v5.0 Architecture'], dBot: null,
+    steps: [['MTProto Telethon Async', 'Direct Telegram client connection that handles continuous feeds, with FloodWait-aware pacing.'], ['Dynamic Queue Stagger', 'Spreads posts across time slots within Telegram\'s 100 scheduled-message limit.'], ['Cloud Log Sync', 'Mirrors state and configuration into private Telegram log channels.']] }
+];
+
+const deck = document.getElementById('deck');
+const drawers = document.getElementById('drawers');
+SYSTEMS.forEach(s => {
+  deck.insertAdjacentHTML('beforeend', `
+  <article class="sys-card ${s.cls}" role="button" tabindex="0" data-open="${s.id}" aria-label="${s.title} details">
+    <div class="card-topbar">
+      <div class="card-head">
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">${s.icon}</svg></div>
+        <div><h3>${s.title}</h3><div class="card-meta"><span>${s.sub}</span><span class="tag-pill">${s.tag}</span></div></div>
       </div>
-      <div class="feature-step-list">
-        <div class="step-box"><div class="step-num lime">01</div><div class="step-text"><h4>MTProto Telethon Async</h4><p>Direct Telegram binary socket client handling continuous feeds without rate throttling.</p></div></div>
-        <div class="step-box"><div class="step-num lime">02</div><div class="step-text"><h4>Dynamic Queue Stagger</h4><p>Distributes posts across time slots while strictly adhering to the 100 scheduled message ceiling.</p></div></div>
-        <div class="step-box"><div class="step-num lime">03</div><div class="step-text"><h4>Cloud Log Sync</h4><p>Mirrors active state and configuration directly into private Telegram log channels.</p></div></div>
-      </div>
+      <div class="card-arrow">${ARROW}</div>
     </div>
-  </div>
+    <p class="card-desc">${s.desc}</p>
+    <div class="specs-grid">${s.specs.map(([k, v]) => `<div class="spec-item"><span class="spec-key">${k}</span><span class="spec-val" title="${v}">${v}</span></div>`).join('')}</div>
+    <div class="pill-stack">${s.pills.map(p => `<span class="pill-micro">${p}</span>`).join('')}</div>
+  </article>`);
 
-  <!-- INTERACTIVE ADMIN CONCIERGE DRAWER -->
-  <div class="drawer-overlay" id="drawer-desk">
-    <div class="drawer-card">
+  const b = s.dBot;
+  drawers.insertAdjacentHTML('beforeend', `
+  <div class="drawer-overlay" id="drawer-${s.id}" role="dialog" aria-modal="true" aria-labelledby="t-${s.id}" inert>
+    <div class="drawer-card ${s.cls}">
       <div class="drawer-grip"></div>
-      <div class="drawer-top">
-        <h2>Admin <span>Concierge Desk</span></h2>
-        <button class="btn-close" id="close-desk">✕</button>
-      </div>
-
-      <div class="bot-callout">
-        <div class="bot-meta">
-          <h5>JoinLinks Hub Sentinel</h5>
-          <p>@JoinLinks_hub_bot • Relay Gateway</p>
-        </div>
-        <a href="https://t.me/JoinLinks_hub_bot" target="_blank" class="btn-launch" id="launch-desk">
-          <span>Open Telegram</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-        </a>
-      </div>
-
-      <!-- Live Web Dispatch Form -->
-      <form class="dispatch-form" id="concierge-form">
-        <div class="form-group">
-          <label class="form-label" for="contact-input">Contact Coordinate</label>
-          <input type="text" id="contact-input" class="form-input" placeholder="@telegram_handle or user@email.com" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="message-input">Transmission Payload</label>
-          <textarea id="message-input" class="form-textarea" placeholder="Describe your technical inquiry, proposal, or systems request..." required></textarea>
-        </div>
-
-        <button type="submit" class="btn-submit" id="submit-btn">
-          <span>Transmit Dispatch</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-        </button>
-      </form>
-
-      <!-- Transmission Receipt Banner -->
-      <div class="form-receipt" id="form-receipt">
-        <div class="receipt-title" id="receipt-title">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span>Dispatch Transmitted Successfully</span>
-        </div>
-        <p class="receipt-desc" id="receipt-desc">
-          Routed directly to Sentinel. Ticket Reference: <span class="receipt-ticket" id="receipt-ticket">TCK-000000</span>
-        </p>
-      </div>
+      <div class="drawer-top"><h2 id="t-${s.id}">${s.dTitle[0]} <span>${s.dTitle[1]}</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
+      ${b ? `<div class="bot-callout"><div><h5>${b[0]}</h5><p>${b[1]}</p></div><a href="https://t.me/${s.bot}" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="${s.bot}">${b[2]}${EXT}</a></div>` : ''}
+      <ol class="steps">${s.steps.map(([h, p], i) => `<li class="step"><div class="step-num">0${i + 1}</div><div><h4>${h}</h4><p>${p}</p></div></li>`).join('')}</ol>
     </div>
-  </div>
+  </div>`);
+});
 
-  <div class="drawer-overlay" id="drawer-about">
-    <div class="drawer-card">
-      <div class="drawer-grip"></div>
-      <div class="drawer-top">
-        <h2>Builder <span>Dossier</span></h2>
-        <button class="btn-close" id="close-about">✕</button>
-      </div>
-      <p style="font-size:0.86rem; color:var(--text-muted); line-height:1.6; margin-bottom:12px;">
-        <strong>Self-directed systems developer specializing in Telegram platforms and serverless edge computing.</strong>
-      </p>
-      <p style="font-size:0.84rem; color:var(--text-muted); line-height:1.6; margin-bottom:14px;">
-        Combining AI reasoning with <strong>Cloudflare's serverless edge ecosystem</strong> (Pages, Workers, D1 SQL, and KV) and <strong>Python / Telethon MTProto terminal pipelines</strong> to deploy high-uptime automation systems with zero server upkeep.
-      </p>
-      <div class="pill-stack">
-        <span class="pill-micro">⚡ Cloudflare Workers</span>
-        <span class="pill-micro">🗄️ Cloudflare D1 SQL</span>
-        <span class="pill-micro">📱 Linux CLI</span>
-        <span class="pill-micro">🚀 MTProto Telethon</span>
-      </div>
-    </div>
-  </div>
+let current = null, lastTrigger = null;
 
-  <script>
-    if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.expand();
-    }
+function openDrawer(id, trigger) {
+  const el = document.getElementById('drawer-' + id);
+  if (!el) return;
+  if (current) closeDrawer(true);
+  haptic('impactOccurred', 'light');
+  lastTrigger = trigger; current = el;
+  el.inert = false;
+  el.classList.add('active');
+  document.body.classList.add('locked');
+  el.querySelector('[data-close]').focus({ preventScroll: true });
+  if (tg && tg.BackButton) { tg.BackButton.onClick(onBack); tg.BackButton.show(); }
+}
 
-    function linkDrawer(triggerId, closeId, drawerId) {
-      const trigger = document.getElementById(triggerId);
-      const close = document.getElementById(closeId);
-      const drawer = document.getElementById(drawerId);
-      if (!trigger || !close || !drawer) return;
+function onBack() { closeDrawer(); }
 
-      trigger.addEventListener('click', () => {
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-          window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
-        }
-        drawer.classList.add('active');
-      });
+function closeDrawer(silent) {
+  if (!current) return;
+  current.classList.remove('active');
+  current.inert = true;
+  current = null;
+  document.body.classList.remove('locked');
+  if (tg && tg.BackButton) { tg.BackButton.offClick(onBack); tg.BackButton.hide(); }
+  if (!silent && lastTrigger) lastTrigger.focus({ preventScroll: true });
+}
 
-      close.addEventListener('click', () => drawer.classList.remove('active'));
-      drawer.addEventListener('click', (e) => {
-        if (e.target === drawer) drawer.classList.remove('active');
-      });
-    }
+document.addEventListener('click', e => {
+  const tgLink = e.target.closest('[data-tg]');
+  if (tgLink) {
+    haptic('impactOccurred', 'medium');
+    if (tg && tg.openTelegramLink) { e.preventDefault(); tg.openTelegramLink('https://t.me/' + tgLink.dataset.tg); }
+    return;
+  }
+  if (e.target.closest('[data-close]') || e.target.classList.contains('drawer-overlay')) return closeDrawer();
+  const opener = e.target.closest('[data-open]');
+  if (opener) openDrawer(opener.dataset.open, opener);
+});
 
-    linkDrawer('card-omnipost', 'close-omnipost', 'drawer-omnipost');
-    linkDrawer('card-growth', 'close-growth', 'drawer-growth');
-    linkDrawer('card-cmd', 'close-cmd', 'drawer-cmd');
-    linkDrawer('open-desk-btn', 'close-desk', 'drawer-desk');
-    linkDrawer('open-about-btn', 'close-about', 'drawer-about');
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') return closeDrawer();
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.sys-card')) { e.preventDefault(); openDrawer(e.target.dataset.open, e.target); }
+  if (e.key === 'Tab' && current) {
+    const f = [...current.querySelectorAll('a[href],button:not(:disabled),input,textarea')].filter(n => n.tabIndex >= 0);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+});
 
-    function setupTelegramRedirect(elementId, botUsername) {
-      const btn = document.getElementById(elementId);
-      if (!btn) return;
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-          window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-        }
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
-          e.preventDefault();
-          window.Telegram.WebApp.openTelegramLink(`https://t.me/${botUsername}`);
-        }
-      });
-    }
+/* ---------- Contact form pointing to prabhu-labs-gateway ---------- */
+const GATEWAY_URL = 'https://prabhu-labs-gateway.prabhu-y1211.workers.dev/notify';
+const form = document.getElementById('concierge-form');
+const submitBtn = document.getElementById('submit-btn');
+const receipt = document.getElementById('form-receipt');
+const rTitle = document.getElementById('receipt-title');
+const rDesc = document.getElementById('receipt-desc');
 
-    setupTelegramRedirect('launch-omnipost', 'OmniPost_Cloud_bot');
-    setupTelegramRedirect('launch-growth', 'Quick_Join_Bot');
-    setupTelegramRedirect('launch-desk', 'JoinLinks_hub_bot');
+function showReceipt(ok, title, desc, ticket) {
+  receipt.classList.toggle('error', !ok);
+  rTitle.textContent = title;
+  rDesc.textContent = desc;
+  if (ticket) {
+    const t = document.createElement('span');
+    t.className = 'receipt-ticket';
+    t.textContent = String(ticket).slice(0, 40);
+    rDesc.append(' ', t);
+  }
+  receipt.style.display = 'block';
+}
 
-    // LIVE CONCIERGE WEB DISPATCH ENGINE
-    const GATEWAY_URL = "https://joinlinks-edge-gateway.prabhu-y1211.workers.dev/notify";
-    const form = document.getElementById('concierge-form');
-    const contactInput = document.getElementById('contact-input');
-    const messageInput = document.getElementById('message-input');
-    const submitBtn = document.getElementById('submit-btn');
-    const receipt = document.getElementById('form-receipt');
-    const receiptTitle = document.getElementById('receipt-title');
-    const receiptDesc = document.getElementById('receipt-desc');
-    const receiptTicket = document.getElementById('receipt-ticket');
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const contact = document.getElementById('contact-input').value.trim();
+  const text = document.getElementById('message-input').value.trim();
+  if (!contact || !text) return showReceipt(false, 'Missing details', 'Add a contact and a message, then send again.');
+  if (document.getElementById('hp').value) return;
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const contact = contactInput.value.trim();
-      const text = messageInput.value.trim();
+  submitBtn.disabled = true; submitBtn.textContent = 'Sending…';
+  receipt.style.display = 'none';
 
-      if (!contact || !text) return;
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<span>Transmitting...</span>`;
-      receipt.style.display = 'none';
-      receipt.classList.remove('error');
-
-      try {
-        const response = await fetch(GATEWAY_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contact, text })
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          receiptTicket.textContent = data.ticket;
-          receiptTitle.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Dispatch Transmitted</span>`;
-          receiptDesc.innerHTML = `Routed directly to Prabhu's terminal. Reference ID: <span class="receipt-ticket">${data.ticket}</span>`;
-          receipt.style.display = 'block';
-          form.reset();
-
-          if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-            window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-          }
-        } else {
-          throw new Error('Relay rejected');
-        }
-      } catch (err) {
-        receipt.classList.add('error');
-        receiptTitle.innerHTML = `<span>Transmission Error</span>`;
-        receiptDesc.textContent = 'Gateway unavailable. Try launching @JoinLinks_hub_bot above directly.';
-        receipt.style.display = 'block';
-
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-          window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-        }
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<span>Transmit Dispatch</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
-      }
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000);
+  try {
+    const res = await fetch(GATEWAY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contact, text, initData: (tg && tg.initData) || '' }),
+      signal: ctrl.signal
     });
-  </script>
+    let data = null;
+    try { data = await res.json(); } catch (_) {}
+
+    if (res.ok && data && data.success) {
+      showReceipt(true, 'Message sent', 'Delivered to Prabhu. Reference:', data.ticket);
+      form.reset();
+      haptic('notificationOccurred', 'success');
+    } else if (res.status === 429) {
+      showReceipt(false, 'Too many messages', 'Wait a few minutes and try again.');
+      haptic('notificationOccurred', 'error');
+    } else {
+      showReceipt(false, 'Message not sent', 'The gateway rejected it. Check your details, or message @JoinLinks_hub_bot directly.');
+      haptic('notificationOccurred', 'error');
+    }
+  } catch (err) {
+    showReceipt(false, err.name === 'AbortError' ? 'Request timed out' : 'Gateway unavailable', 'Try again, or message @JoinLinks_hub_bot directly.');
+    haptic('notificationOccurred', 'error');
+  } finally {
+    clearTimeout(timer);
+    submitBtn.disabled = false; submitBtn.textContent = 'Send message';
+  }
+});
+</script>
 </body>
 </html>
