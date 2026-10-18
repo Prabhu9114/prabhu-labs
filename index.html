@@ -149,8 +149,8 @@ body.locked{overflow:hidden}
     <div class="drawer-grip"></div>
     <div class="drawer-top"><h2 id="t-desk">Admin <span>Concierge Desk</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
     <div class="bot-callout">
-      <div><h5>JoinLinks Hub Sentinel</h5><p>@JoinLinks_hub_bot • Relay Gateway</p></div>
-      <a href="https://t.me/JoinLinks_hub_bot" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="JoinLinks_hub_bot">Open Telegram</a>
+      <div><h5>Prabhu Labs Sentinel</h5><p>@prabhulabs_bot • Relay Gateway</p></div>
+      <a href="https://t.me/prabhulabs_bot" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="prabhulabs_bot">Open Telegram</a>
     </div>
     <form class="dispatch-form" id="concierge-form" novalidate>
       <div class="form-group">
@@ -347,11 +347,11 @@ form.addEventListener('submit', async e => {
       showReceipt(false, 'Too many messages', 'Wait a few minutes and try again.');
       haptic('notificationOccurred', 'error');
     } else {
-      showReceipt(false, 'Message not sent', 'The gateway rejected it. Check your details, or message @JoinLinks_hub_bot directly.');
+      showReceipt(false, 'Message not sent', 'The gateway rejected it. Check your details, or message @prabhulabs_bot directly.');
       haptic('notificationOccurred', 'error');
     }
   } catch (err) {
-    showReceipt(false, err.name === 'AbortError' ? 'Request timed out' : 'Gateway unavailable', 'Try again, or message @JoinLinks_hub_bot directly.');
+    showReceipt(false, err.name === 'AbortError' ? 'Request timed out' : 'Gateway unavailable', 'Try again, or message @prabhulabs_bot directly.');
     haptic('notificationOccurred', 'error');
   } finally {
     clearTimeout(timer);
