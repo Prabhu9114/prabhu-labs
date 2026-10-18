@@ -648,6 +648,124 @@
     .step-text h4 { font-size: 0.86rem; color: #fff; font-weight: 700; margin-bottom: 3px; }
     .step-text p { font-size: 0.76rem; color: var(--text-muted); line-height: 1.45; }
 
+    /* Web Dispatch Form Styles */
+    .dispatch-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+
+    .form-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-input, .form-textarea {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.84rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.04);
+      box-shadow: 0 0 12px var(--neon-cyan-glow);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .btn-submit {
+      background: var(--neon-cyan);
+      color: #07090e;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      box-shadow: 0 0 20px var(--neon-cyan-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .form-receipt {
+      display: none;
+      background: rgba(163, 230, 53, 0.08);
+      border: 1px solid rgba(163, 230, 53, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+      text-align: left;
+    }
+
+    .form-receipt.error {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .receipt-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--neon-lime);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-receipt.error .receipt-title {
+      color: #f87171;
+    }
+
+    .receipt-desc {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .receipt-ticket {
+      font-family: 'JetBrains Mono', monospace;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
     .app-footer {
       margin-top: 16px;
       text-align: center;
@@ -915,6 +1033,7 @@
     </div>
   </div>
 
+  <!-- INTERACTIVE ADMIN CONCIERGE DRAWER -->
   <div class="drawer-overlay" id="drawer-desk">
     <div class="drawer-card">
       <div class="drawer-grip"></div>
@@ -922,19 +1041,46 @@
         <h2>Admin <span>Concierge Desk</span></h2>
         <button class="btn-close" id="close-desk">✕</button>
       </div>
+
       <div class="bot-callout">
         <div class="bot-meta">
           <h5>JoinLinks Hub Sentinel</h5>
-          <p>@JoinLinks_hub_bot • Administrative Bridge</p>
+          <p>@JoinLinks_hub_bot • Relay Gateway</p>
         </div>
         <a href="https://t.me/JoinLinks_hub_bot" target="_blank" class="btn-launch" id="launch-desk">
-          <span>Open Desk</span>
+          <span>Open Telegram</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
         </a>
       </div>
-      <p style="font-size:0.84rem; color:var(--text-muted); line-height:1.55;">
-        Send a direct message through our concierge bridge. Messages route to an administrative relay channel for real-time response.
-      </p>
+
+      <!-- Live Web Dispatch Form -->
+      <form class="dispatch-form" id="concierge-form">
+        <div class="form-group">
+          <label class="form-label" for="contact-input">Contact Coordinate</label>
+          <input type="text" id="contact-input" class="form-input" placeholder="@telegram_handle or user@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message-input">Transmission Payload</label>
+          <textarea id="message-input" class="form-textarea" placeholder="Describe your technical inquiry, proposal, or systems request..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <span>Transmit Dispatch</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </form>
+
+      <!-- Transmission Receipt Banner -->
+      <div class="form-receipt" id="form-receipt">
+        <div class="receipt-title" id="receipt-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Dispatch Transmitted Successfully</span>
+        </div>
+        <p class="receipt-desc" id="receipt-desc">
+          Routed directly to Sentinel. Ticket Reference: <span class="receipt-ticket" id="receipt-ticket">TCK-000000</span>
+        </p>
+      </div>
     </div>
   </div>
 
@@ -1009,6 +1155,66 @@
     setupTelegramRedirect('launch-omnipost', 'OmniPost_Cloud_bot');
     setupTelegramRedirect('launch-growth', 'Quick_Join_Bot');
     setupTelegramRedirect('launch-desk', 'JoinLinks_hub_bot');
+
+    // LIVE CONCIERGE WEB DISPATCH ENGINE
+    const GATEWAY_URL = "https://joinlinks-edge-gateway.prabhu-y1211.workers.dev/notify";
+    const form = document.getElementById('concierge-form');
+    const contactInput = document.getElementById('contact-input');
+    const messageInput = document.getElementById('message-input');
+    const submitBtn = document.getElementById('submit-btn');
+    const receipt = document.getElementById('form-receipt');
+    const receiptTitle = document.getElementById('receipt-title');
+    const receiptDesc = document.getElementById('receipt-desc');
+    const receiptTicket = document.getElementById('receipt-ticket');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const contact = contactInput.value.trim();
+      const text = messageInput.value.trim();
+
+      if (!contact || !text) return;
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>Transmitting...</span>`;
+      receipt.style.display = 'none';
+      receipt.classList.remove('error');
+
+      try {
+        const response = await fetch(GATEWAY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contact, text })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          receiptTicket.textContent = data.ticket;
+          receiptTitle.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Dispatch Transmitted</span>`;
+          receiptDesc.innerHTML = `Routed directly to Prabhu's terminal. Reference ID: <span class="receipt-ticket">${data.ticket}</span>`;
+          receipt.style.display = 'block';
+          form.reset();
+
+          if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+            window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+          }
+        } else {
+          throw new Error('Relay rejected');
+        }
+      } catch (err) {
+        receipt.classList.add('error');
+        receiptTitle.innerHTML = `<span>Transmission Error</span>`;
+        receiptDesc.textContent = 'Gateway unavailable. Try launching @JoinLinks_hub_bot above directly.';
+        receipt.style.display = 'block';
+
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+          window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<span>Transmit Dispatch</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+      }
+    });
   </script>
 </body>
 </html>
