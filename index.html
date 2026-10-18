@@ -2,39 +2,968 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Prabhu Labs • Systems & Edge Engineering</title>
+
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- OpenGraph Metadata -->
+  <meta property="og:title" content="Prabhu Labs — Hybrid Systems & Automation Showcase">
+  <meta property="og:description" content="Serverless Telegram distribution platforms, D1 SQL data aggregation, and MTProto cloud pipelines.">
+  <meta name="theme-color" content="#07090e">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      background-color: #07090e;
-      color: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(13, 18, 29, 0.78);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --neon-cyan: #00f0ff;
+      --neon-cyan-glow: rgba(0, 240, 255, 0.35);
+      --neon-gold: #fbbf24;
+      --neon-gold-glow: rgba(251, 191, 36, 0.35);
+      --neon-lime: #a3e635;
+      --neon-lime-glow: rgba(163, 230, 53, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #475569;
+      --glass-blur: blur(20px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .bg-matrix {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      top: -180px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(0, 240, 255, 0.12) 0%, rgba(251, 191, 36, 0.04) 45%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .app-shell {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: max(24px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom)) 18px;
       display: flex;
       flex-direction: column;
+      gap: 22px;
+    }
+
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      backdrop-filter: var(--glass-blur);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .nav-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: #0d121d;
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      text-align: center;
+      font-weight: 800;
+      color: var(--neon-cyan);
+      font-family: 'Space Grotesk', sans-serif;
     }
-    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-    h1 span { color: #00f0ff; }
-    p { color: #94a3b8; font-size: 1rem; max-width: 480px; }
-    .badge {
-      font-family: monospace;
-      font-size: 0.75rem;
-      color: #a3e635;
-      background: rgba(163, 230, 53, 0.1);
-      border: 1px solid rgba(163, 230, 53, 0.3);
-      padding: 4px 12px;
+
+    .nav-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .nav-title span { color: var(--neon-cyan); }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--neon-lime);
+      background: rgba(163, 230, 53, 0.08);
+      border: 1px solid rgba(163, 230, 53, 0.25);
+      padding: 4px 10px;
       border-radius: 999px;
-      margin-bottom: 1.5rem;
+    }
+
+    .status-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--neon-lime);
+      box-shadow: 0 0 8px var(--neon-lime);
+      animation: pulseAnim 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .hero-panel {
+      text-align: center;
+      padding: 12px 0 10px 0;
+    }
+
+    .hero-kicker {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.2rem, 5.5vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .hero-title .glow {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 24px var(--neon-cyan-glow);
+    }
+
+    .hero-desc {
+      font-size: clamp(0.86rem, 2.4vw, 0.95rem);
+      color: var(--text-muted);
+      line-height: 1.55;
+      max-width: 500px;
+      margin: 0 auto 16px auto;
+    }
+
+    .hero-cta-rack {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 9px 18px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      text-decoration: none;
+      backdrop-filter: var(--glass-blur);
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      background: rgba(0, 240, 255, 0.08);
+      border-color: rgba(0, 240, 255, 0.35);
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-action.primary {
+      background: var(--neon-cyan);
+      color: #07090e;
+      border-color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    .btn-action.primary:hover {
+      background: #38f8ff;
+      box-shadow: 0 0 20px var(--neon-cyan-glow);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 12px;
+    }
+
+    .section-head h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    .section-head::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    }
+
+    .deck-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sys-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: clamp(18px, 3.5vw, 24px);
+      backdrop-filter: var(--glass-blur);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sys-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    }
+
+    .sys-card:hover {
+      border-color: rgba(0, 240, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 24px var(--neon-cyan-glow);
+    }
+
+    .sys-card.gold:hover {
+      border-color: rgba(251, 191, 36, 0.45);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 24px var(--neon-gold-glow);
+    }
+
+    .sys-card.lime:hover {
+      border-color: rgba(163, 230, 53, 0.45);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 24px var(--neon-lime-glow);
+    }
+
+    .card-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--neon-cyan);
+    }
+
+    .sys-card.gold .card-icon {
+      background: rgba(251, 191, 36, 0.1);
+      border-color: rgba(251, 191, 36, 0.35);
+      color: var(--neon-gold);
+    }
+
+    .sys-card.lime .card-icon {
+      background: rgba(163, 230, 53, 0.1);
+      border-color: rgba(163, 230, 53, 0.35);
+      color: var(--neon-lime);
+    }
+
+    .card-titles h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .card-meta-tag {
+      font-size: 0.68rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sys-card.gold .card-meta-tag { color: var(--neon-gold); }
+    .sys-card.lime .card-meta-tag { color: var(--neon-lime); }
+
+    .tag-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1px 7px;
+      border-radius: 5px;
+      color: var(--text-muted);
+    }
+
+    .card-arrow {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .sys-card:hover .card-arrow {
+      background: var(--neon-cyan);
+      color: #07090e;
+      border-color: var(--neon-cyan);
+      transform: translateX(2px);
+    }
+
+    .sys-card.gold:hover .card-arrow {
+      background: var(--neon-gold);
+      color: #07090e;
+      border-color: var(--neon-gold);
+      transform: translateX(2px);
+    }
+
+    .sys-card.lime:hover .card-arrow {
+      background: var(--neon-lime);
+      color: #07090e;
+      border-color: var(--neon-lime);
+      transform: translateX(2px);
+    }
+
+    .card-desc {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .spec-item {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 9px 12px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .spec-key {
+      font-size: 0.62rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .spec-val {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pill-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill-micro {
+      font-size: 0.68rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--text-muted);
+    }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 14, 0.88);
+      backdrop-filter: blur(18px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0 12px 12px 12px;
+    }
+
+    .drawer-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .drawer-card {
+      background: #0d121d;
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 580px;
+      padding: 24px;
+      box-shadow: 0 -16px 48px rgba(0, 0, 0, 0.85), 0 0 32px rgba(0, 240, 255, 0.1);
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .drawer-overlay.active .drawer-card { transform: translateY(0); }
+
+    .drawer-grip {
+      width: 40px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      margin: 0 auto 16px auto;
+    }
+
+    .drawer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .drawer-top h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .drawer-top h2 span { color: var(--neon-cyan); }
+    .drawer-top h2 span.gold { color: var(--neon-gold); }
+    .drawer-top h2 span.lime { color: var(--neon-lime); }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .btn-close:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+
+    .bot-callout {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .bot-meta h5 { font-size: 0.88rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .bot-meta p { font-size: 0.72rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+
+    .btn-launch {
+      background: var(--neon-cyan);
+      color: #07090e;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .btn-launch:hover { box-shadow: 0 0 16px var(--neon-cyan-glow); transform: translateY(-1px); }
+    .btn-launch.gold { background: var(--neon-gold); }
+    .btn-launch.gold:hover { box-shadow: 0 0 16px var(--neon-gold-glow); }
+
+    .feature-step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .step-box {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .step-num {
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      color: var(--neon-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 6px;
+      line-height: 1;
+    }
+
+    .step-num.gold { background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.35); color: var(--neon-gold); }
+    .step-num.lime { background: rgba(163, 230, 53, 0.1); border-color: rgba(163, 230, 53, 0.35); color: var(--neon-lime); }
+
+    .step-text h4 { font-size: 0.86rem; color: #fff; font-weight: 700; margin-bottom: 3px; }
+    .step-text p { font-size: 0.76rem; color: var(--text-muted); line-height: 1.45; }
+
+    .app-footer {
+      margin-top: 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .footer-copy { font-size: 0.74rem; color: var(--text-dim); }
+    .footer-edge { font-size: 0.74rem; color: var(--text-muted); }
+    .footer-edge span { color: var(--neon-cyan); font-weight: 600; }
+
+    @media (min-width: 880px) {
+      .app-shell { max-width: 840px; padding: 40px 24px 36px 24px; gap: 28px; }
+      .hero-title { font-size: 3rem; }
+      .specs-grid { grid-template-columns: repeat(4, 1fr); }
+      .drawer-overlay { align-items: center; padding: 24px; }
+      .drawer-card { border-radius: 28px; max-width: 680px; padding: 32px; transform: scale(0.95); }
+      .drawer-overlay.active .drawer-card { transform: scale(1); }
+      .drawer-grip { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="badge">● SYSTEM INITIALIZING</div>
-  <h1>Prabhu <span>Labs</span></h1>
-  <p>Production-grade Telegram infrastructure, Cloudflare edge pipelines, and hybrid cloud compute.</p>
+  <div class="bg-matrix"></div>
+  <div class="ambient-glow"></div>
+
+  <main class="app-shell">
+    <!-- Header Navigation -->
+    <nav class="nav-bar">
+      <div class="nav-brand">
+        <div class="nav-logo">PL</div>
+        <span class="nav-title">Prabhu <span>Labs</span></span>
+      </div>
+
+      <div class="status-badge">
+        <span class="status-pulse"></span>
+        <span>EDGE CLUSTER LIVE</span>
+      </div>
+    </nav>
+
+    <!-- Hero Identity -->
+    <header class="hero-panel">
+      <div class="hero-kicker">EDGE ARCHITECTURE • TELEGRAM SYSTEMS</div>
+      <h1 class="hero-title">Prabhu <span class="glow">Labs</span></h1>
+      <p class="hero-desc">
+        Serverless Telegram distribution platforms, D1 SQL audience pipelines, and automated MTProto engines running entirely on edge and cloud compute.
+      </p>
+
+      <div class="hero-cta-rack">
+        <button class="btn-action primary" id="open-desk-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Admin Concierge Desk</span>
+        </button>
+
+        <button class="btn-action" id="open-about-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span>Builder Dossier</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Systems Deck -->
+    <section>
+      <div class="section-head">
+        <h2>Engineered Deployments</h2>
+      </div>
+
+      <div class="deck-container">
+        <!-- SYSTEM 1: OmniPost Cloud -->
+        <article class="sys-card" id="card-omnipost">
+          <div class="card-topbar">
+            <div class="card-header-main">
+              <div class="card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="m13 13 3-3-3-3"/><path d="M16 10H8"/></svg>
+              </div>
+              <div class="card-titles">
+                <h3>OmniPost Cloud</h3>
+                <div class="card-meta-tag">
+                  <span>Serverless Fanout</span>
+                  <span class="tag-pill">@OmniPost_Cloud_bot</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+
+          <p class="card-desc">
+            Automated multi-tenant Telegram channel fanout engine. Duplicates posts across 10 destination channels via edge cron triggers with rate-limit dampening.
+          </p>
+
+          <div class="specs-grid">
+            <div class="spec-item"><span class="spec-key">Live Gateway</span><span class="spec-val">@OmniPost_Cloud_bot</span></div>
+            <div class="spec-item"><span class="spec-key">Fanout Ratio</span><span class="spec-val">1 In ➔ 10 Out</span></div>
+            <div class="spec-item"><span class="spec-key">Compute Core</span><span class="spec-val">Workers + KV</span></div>
+            <div class="spec-item"><span class="spec-key">Discovery</span><span class="spec-val">Zero-Config Webhook</span></div>
+          </div>
+
+          <div class="pill-stack">
+            <span class="pill-micro">Cloudflare Workers</span>
+            <span class="pill-micro">Workers KV</span>
+            <span class="pill-micro">Telegram Bot API</span>
+            <span class="pill-micro">Cron Scheduling</span>
+            <span class="pill-micro">Tenant RBAC</span>
+          </div>
+        </article>
+
+        <!-- SYSTEM 2: TeleGrowth Engine -->
+        <article class="sys-card gold" id="card-growth">
+          <div class="card-topbar">
+            <div class="card-header-main">
+              <div class="card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+              </div>
+              <div class="card-titles">
+                <h3>TeleGrowth Engine</h3>
+                <div class="card-meta-tag">
+                  <span>Audience Engine</span>
+                  <span class="tag-pill">@Quick_Join_Bot</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+
+          <p class="card-desc">
+            High-scale join request approval gateway with instant edge webhooks, interactive verification hooks, and central D1 SQL audience aggregation.
+          </p>
+
+          <div class="specs-grid">
+            <div class="spec-item"><span class="spec-key">Live Gateway</span><span class="spec-val">@Quick_Join_Bot</span></div>
+            <div class="spec-item"><span class="spec-key">Approval Latency</span><span class="spec-val">&lt; 1.0s Edge</span></div>
+            <div class="spec-item"><span class="spec-key">Database Layer</span><span class="spec-val">Cloudflare D1 (SQL)</span></div>
+            <div class="spec-item"><span class="spec-key">Conversion Hook</span><span class="spec-val">can_dm = 1</span></div>
+          </div>
+
+          <div class="pill-stack">
+            <span class="pill-micro">Cloudflare D1</span>
+            <span class="pill-micro">Fast Webhooks</span>
+            <span class="pill-micro">Inline Keyboards</span>
+            <span class="pill-micro">Retention Loops</span>
+            <span class="pill-micro">Reactions Engine</span>
+          </div>
+        </article>
+
+        <!-- SYSTEM 3: Command Center v5.0 -->
+        <article class="sys-card lime" id="card-cmd">
+          <div class="card-topbar">
+            <div class="card-header-main">
+              <div class="card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              </div>
+              <div class="card-titles">
+                <h3>Command Center v5.0</h3>
+                <div class="card-meta-tag">
+                  <span>MTProto Automation</span>
+                  <span class="tag-pill">Telethon Core</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+
+          <p class="card-desc">
+            Production-grade MTProto automation suite for high-volume content operations. Automates multi-source feeds, link conversions, and staggered scheduling.
+          </p>
+
+          <div class="specs-grid">
+            <div class="spec-item"><span class="spec-key">Engine Core</span><span class="spec-val">Telethon Async</span></div>
+            <div class="spec-item"><span class="spec-key">Queue Stagger</span><span class="spec-val">100-Post Safe Slot</span></div>
+            <div class="spec-item"><span class="spec-key">Bridge Converter</span><span class="spec-val">TeraBox & Diskwala</span></div>
+            <div class="spec-item"><span class="spec-key">Disaster Recovery</span><span class="spec-val">Encrypted Log Sync</span></div>
+          </div>
+
+          <div class="pill-stack">
+            <span class="pill-micro">Python 3</span>
+            <span class="pill-micro">Telethon Async</span>
+            <span class="pill-micro">Linux CLI</span>
+            <span class="pill-micro">Diskwala API</span>
+            <span class="pill-micro">State Mirroring</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-copy">© 2026 Prabhu Labs • All rights reserved</div>
+      <div class="footer-edge">Production Infrastructure: <span>Cloudflare Edge V8</span></div>
+    </footer>
+  </main>
+
+  <!-- Drawers -->
+  <div class="drawer-overlay" id="drawer-omnipost">
+    <div class="drawer-card">
+      <div class="drawer-grip"></div>
+      <div class="drawer-top">
+        <h2>OmniPost <span>Cloud Architecture</span></h2>
+        <button class="btn-close" id="close-omnipost">✕</button>
+      </div>
+      <div class="bot-callout">
+        <div class="bot-meta">
+          <h5>OmniPost Cloud Bot</h5>
+          <p>@OmniPost_Cloud_bot • Multi-Tenant Fanout</p>
+        </div>
+        <a href="https://t.me/OmniPost_Cloud_bot" target="_blank" class="btn-launch" id="launch-omnipost">
+          <span>Launch Bot</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+      </div>
+      <div class="feature-step-list">
+        <div class="step-box"><div class="step-num">01</div><div class="step-text"><h4>Batch Dispatch</h4><p>Distributes source content to up to 10 channels with dynamic rate-limiting to prevent flood waits.</p></div></div>
+        <div class="step-box"><div class="step-num">02</div><div class="step-text"><h4>Webhook Channel Discovery</h4><p>Auto-detects bot administrator appointments without requiring manual Chat ID inputs.</p></div></div>
+        <div class="step-box"><div class="step-num">03</div><div class="step-text"><h4>Workers KV State</h4><p>Maintains tenant queues with global edge replication and low retrieval latencies.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" id="drawer-growth">
+    <div class="drawer-card">
+      <div class="drawer-grip"></div>
+      <div class="drawer-top">
+        <h2>TeleGrowth <span class="gold">Engine Architecture</span></h2>
+        <button class="btn-close" id="close-growth">✕</button>
+      </div>
+      <div class="bot-callout">
+        <div class="bot-meta">
+          <h5>Quick Join Master Bot</h5>
+          <p>@Quick_Join_Bot • Fast Approval Gateway</p>
+        </div>
+        <a href="https://t.me/Quick_Join_Bot" target="_blank" class="btn-launch gold" id="launch-growth">
+          <span>Launch Bot</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+      </div>
+      <div class="feature-step-list">
+        <div class="step-box"><div class="step-num gold">01</div><div class="step-text"><h4>Sub-Second Approval</h4><p>Processes join requests in milliseconds via Cloudflare Workers webhooks.</p></div></div>
+        <div class="step-box"><div class="step-num gold">02</div><div class="step-text"><h4>Verification Hook</h4><p>Interactive challenge initiates two-way user DM access (<code>can_dm = 1</code>).</p></div></div>
+        <div class="step-box"><div class="step-num gold">03</div><div class="step-text"><h4>Central D1 SQL Ledger</h4><p>Stores unified subscriber records in SQLite at the edge.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" id="drawer-cmd">
+    <div class="drawer-card">
+      <div class="drawer-grip"></div>
+      <div class="drawer-top">
+        <h2>Command Center <span class="lime">v5.0 Architecture</span></h2>
+        <button class="btn-close" id="close-cmd">✕</button>
+      </div>
+      <div class="feature-step-list">
+        <div class="step-box"><div class="step-num lime">01</div><div class="step-text"><h4>MTProto Telethon Async</h4><p>Direct Telegram binary socket client handling continuous feeds without rate throttling.</p></div></div>
+        <div class="step-box"><div class="step-num lime">02</div><div class="step-text"><h4>Dynamic Queue Stagger</h4><p>Distributes posts across time slots while strictly adhering to the 100 scheduled message ceiling.</p></div></div>
+        <div class="step-box"><div class="step-num lime">03</div><div class="step-text"><h4>Cloud Log Sync</h4><p>Mirrors active state and configuration directly into private Telegram log channels.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" id="drawer-desk">
+    <div class="drawer-card">
+      <div class="drawer-grip"></div>
+      <div class="drawer-top">
+        <h2>Admin <span>Concierge Desk</span></h2>
+        <button class="btn-close" id="close-desk">✕</button>
+      </div>
+      <div class="bot-callout">
+        <div class="bot-meta">
+          <h5>JoinLinks Hub Sentinel</h5>
+          <p>@JoinLinks_hub_bot • Administrative Bridge</p>
+        </div>
+        <a href="https://t.me/JoinLinks_hub_bot" target="_blank" class="btn-launch" id="launch-desk">
+          <span>Open Desk</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+      </div>
+      <p style="font-size:0.84rem; color:var(--text-muted); line-height:1.55;">
+        Send a direct message through our concierge bridge. Messages route to an administrative relay channel for real-time response.
+      </p>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" id="drawer-about">
+    <div class="drawer-card">
+      <div class="drawer-grip"></div>
+      <div class="drawer-top">
+        <h2>Builder <span>Dossier</span></h2>
+        <button class="btn-close" id="close-about">✕</button>
+      </div>
+      <p style="font-size:0.86rem; color:var(--text-muted); line-height:1.6; margin-bottom:12px;">
+        <strong>Self-directed systems developer specializing in Telegram platforms and serverless edge computing.</strong>
+      </p>
+      <p style="font-size:0.84rem; color:var(--text-muted); line-height:1.6; margin-bottom:14px;">
+        Combining AI reasoning with <strong>Cloudflare's serverless edge ecosystem</strong> (Pages, Workers, D1 SQL, and KV) and <strong>Python / Telethon MTProto terminal pipelines</strong> to deploy high-uptime automation systems with zero server upkeep.
+      </p>
+      <div class="pill-stack">
+        <span class="pill-micro">⚡ Cloudflare Workers</span>
+        <span class="pill-micro">🗄️ Cloudflare D1 SQL</span>
+        <span class="pill-micro">📱 Linux CLI</span>
+        <span class="pill-micro">🚀 MTProto Telethon</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+    }
+
+    function linkDrawer(triggerId, closeId, drawerId) {
+      const trigger = document.getElementById(triggerId);
+      const close = document.getElementById(closeId);
+      const drawer = document.getElementById(drawerId);
+      if (!trigger || !close || !drawer) return;
+
+      trigger.addEventListener('click', () => {
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+          window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+        drawer.classList.add('active');
+      });
+
+      close.addEventListener('click', () => drawer.classList.remove('active'));
+      drawer.addEventListener('click', (e) => {
+        if (e.target === drawer) drawer.classList.remove('active');
+      });
+    }
+
+    linkDrawer('card-omnipost', 'close-omnipost', 'drawer-omnipost');
+    linkDrawer('card-growth', 'close-growth', 'drawer-growth');
+    linkDrawer('card-cmd', 'close-cmd', 'drawer-cmd');
+    linkDrawer('open-desk-btn', 'close-desk', 'drawer-desk');
+    linkDrawer('open-about-btn', 'close-about', 'drawer-about');
+
+    function setupTelegramRedirect(elementId, botUsername) {
+      const btn = document.getElementById(elementId);
+      if (!btn) return;
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+          window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+        }
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
+          e.preventDefault();
+          window.Telegram.WebApp.openTelegramLink(`https://t.me/${botUsername}`);
+        }
+      });
+    }
+
+    setupTelegramRedirect('launch-omnipost', 'OmniPost_Cloud_bot');
+    setupTelegramRedirect('launch-growth', 'Quick_Join_Bot');
+    setupTelegramRedirect('launch-desk', 'JoinLinks_hub_bot');
+  </script>
 </body>
 </html>
