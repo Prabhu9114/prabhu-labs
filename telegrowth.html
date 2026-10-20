@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="google-site-verification" content="xOoDM76F_64NhVbLQSdbQ8vplj_5hRjWDnlX9agB4EY" />
+<title>TeleGrowth Engine • Instant Join-Request Approval Bot — Prabhu Labs</title>
+<meta name="description" content="Approve channel join requests instantly and keep a record of who you can message.">
+<meta property="og:title" content="TeleGrowth Engine • Instant Join-Request Approval Bot">
+<meta property="og:description" content="Approve channel join requests instantly and keep a record of who you can message.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prabhu Labs">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#07090e">
+<link rel="icon" href="logo.png">
+<link rel="canonical" href="https://prabhu-labs.in/telegrowth">
+<meta property="og:url" content="https://prabhu-labs.in/telegrowth">
+<meta property="og:image" content="https://prabhu-labs.in/og-telegrowth.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-matrix" aria-hidden="true"></div>
+<div class="ambient-glow" aria-hidden="true"></div>
+<main class="app-shell proj gold">
+  <nav class="nav-bar" aria-label="Site">
+    <a class="nav-brand" href="index.html" aria-label="Prabhu Labs home">
+      <div class="nav-logo"><img src="logo.png" alt="" onerror="this.parentElement.textContent='PL'"></div>
+      <span class="nav-title">Prabhu <span>Labs</span></span>
+    </a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="portfolio.html" aria-current="page">Portfolio</a></div>
+    <div class="status-badge" role="status"><span class="status-pulse"></span><span>EDGE CLUSTER LIVE</span></div>
+  </nav>
+  <a class="crumb" href="portfolio.html">← Portfolio</a>
+  <header class="page-head">
+    <div class="hero-kicker">AUDIENCE ENGINE • TELEGRAM BOT</div>
+    <h1 class="hero-title">TeleGrowth <span class="glow">Engine</span></h1>
+    <p class="hero-desc">Approve channel join requests instantly and keep a record of who you can message.</p>
+    <div class="hero-cta-rack"><a class="btn-action primary" href="https://t.me/Quick_Join_Bot" target="_blank" rel="noopener noreferrer" data-tg="Quick_Join_Bot">Open @Quick_Join_Bot</a><a class="btn-action" href="index.html#contact">Contact</a></div>
+  </header>
+
+  <section aria-labelledby="prob">
+    <div class="section-head"><h2 id="prob">The Problem</h2></div>
+    <p class="prose">Channels with join requests turned on need every request approved by hand, and approving alone doesn’t tell you which new members you can actually message afterwards.</p>
+  </section>
+
+  <section aria-labelledby="sol">
+    <div class="section-head"><h2 id="sol">The Solution</h2></div>
+    <p class="prose">TeleGrowth Engine approves join requests instantly through an edge webhook, then sends a short interactive verification. Completing it opens a two-way DM and records can_dm = 1, so you know who can be reached. All subscriber records live in a central D1 SQL ledger.</p>
+  </section>
+
+  <section aria-labelledby="how">
+    <div class="section-head"><h2 id="how">How It Works</h2></div>
+    <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>Fast Approval</h4><p>Handles join requests through Cloudflare Workers webhooks.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Verification Hook</h4><p>An interactive challenge opens a two-way DM and sets the can_dm flag in the database.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Central D1 SQL Ledger</h4><p>Stores unified subscriber records in SQLite at the edge.</p></div></li></ol>
+  </section>
+
+  <section aria-labelledby="spec">
+    <div class="section-head"><h2 id="spec">Key Specs</h2></div>
+    <div class="specs-grid"><div class="spec-item"><span class="spec-key">Live Gateway</span><span class="spec-val">@Quick_Join_Bot</span></div><div class="spec-item"><span class="spec-key">Approval</span><span class="spec-val">Edge webhook</span></div><div class="spec-item"><span class="spec-key">Database</span><span class="spec-val">Cloudflare D1 (SQL)</span></div><div class="spec-item"><span class="spec-key">DM Flag</span><span class="spec-val">can_dm = 1</span></div></div>
+  </section>
+
+  <section aria-labelledby="tech">
+    <div class="section-head"><h2 id="tech">Tech Stack</h2></div>
+    <div class="pill-stack"><span class="pill-micro">Cloudflare D1</span><span class="pill-micro">Fast Webhooks</span><span class="pill-micro">Inline Keyboards</span><span class="pill-micro">Retention Loops</span><span class="pill-micro">Reactions Engine</span></div>
+  </section>
+
+  <section aria-labelledby="start">
+    <div class="section-head"><h2 id="start">Get Started</h2></div>
+    <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>Open the bot</h4><p>Tap the button above to open @Quick_Join_Bot in Telegram.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Add it as an admin</h4><p>Make the bot an admin of your channel.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Turn on join requests</h4><p>Enable approval of new members on your channel’s invite link, and the bot takes it from there.</p></div></li></ol>
+    <div class="cta-band"><a class="btn-action primary" href="https://t.me/Quick_Join_Bot" target="_blank" rel="noopener noreferrer" data-tg="Quick_Join_Bot">Open @Quick_Join_Bot</a></div>
+  </section>
+
+  <section aria-labelledby="more">
+    <div class="section-head"><h2 id="more">More Projects</h2></div>
+    <div class="hero-cta-rack"><a class="btn-action" href="omnipost.html">OmniPost Cloud →</a><a class="btn-action" href="command-center.html">Command Center v5.0 →</a></div>
+  </section>
+
+  <footer class="app-footer">
+    <div>© 2026 Prabhu Labs • All rights reserved</div>
+    <div>Production infrastructure: <span>Cloudflare Edge V8</span></div>
+  </footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

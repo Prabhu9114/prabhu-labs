@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="google-site-verification" content="xOoDM76F_64NhVbLQSdbQ8vplj_5hRjWDnlX9agB4EY" />
+<title>OmniPost Cloud • Telegram Channel Fanout Bot — Prabhu Labs</title>
+<meta name="description" content="Copy posts from one Telegram channel to many, in order and at a safe pace.">
+<meta property="og:title" content="OmniPost Cloud • Telegram Channel Fanout Bot">
+<meta property="og:description" content="Copy posts from one Telegram channel to many, in order and at a safe pace.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prabhu Labs">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#07090e">
+<link rel="icon" href="logo.png">
+<link rel="canonical" href="https://prabhu-labs.in/omnipost">
+<meta property="og:url" content="https://prabhu-labs.in/omnipost">
+<meta property="og:image" content="https://prabhu-labs.in/og-omnipost.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-matrix" aria-hidden="true"></div>
+<div class="ambient-glow" aria-hidden="true"></div>
+<main class="app-shell proj">
+  <nav class="nav-bar" aria-label="Site">
+    <a class="nav-brand" href="index.html" aria-label="Prabhu Labs home">
+      <div class="nav-logo"><img src="logo.png" alt="" onerror="this.parentElement.textContent='PL'"></div>
+      <span class="nav-title">Prabhu <span>Labs</span></span>
+    </a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="portfolio.html" aria-current="page">Portfolio</a></div>
+    <div class="status-badge" role="status"><span class="status-pulse"></span><span>EDGE CLUSTER LIVE</span></div>
+  </nav>
+  <a class="crumb" href="portfolio.html">← Portfolio</a>
+  <header class="page-head">
+    <div class="hero-kicker">SERVERLESS FANOUT • TELEGRAM BOT</div>
+    <h1 class="hero-title">OmniPost <span class="glow">Cloud</span></h1>
+    <p class="hero-desc">Copy posts from one Telegram channel to many, in order and at a safe pace.</p>
+    <div class="hero-cta-rack"><a class="btn-action primary" href="https://t.me/OmniPost_Cloud_bot" target="_blank" rel="noopener noreferrer" data-tg="OmniPost_Cloud_bot">Open @OmniPost_Cloud_bot</a><a class="btn-action" href="index.html#contact">Contact</a></div>
+  </header>
+
+  <section aria-labelledby="prob">
+    <div class="section-head"><h2 id="prob">The Problem</h2></div>
+    <p class="prose">Sending the same run of posts to several Telegram channels by hand is slow and easy to get out of order. Doing it in bulk also runs into Telegram’s rate limits.</p>
+  </section>
+
+  <section aria-labelledby="sol">
+    <div class="section-head"><h2 id="sol">The Solution</h2></div>
+    <p class="prose">OmniPost Cloud copies posts from one source channel to each destination channel in sequential batches. Every destination keeps its own pointer, so channels don’t repeat or skip posts, and sending is paced to stay clear of flood waits. When the source runs out, it loops back to the start.</p>
+  </section>
+
+  <section aria-labelledby="how">
+    <div class="section-head"><h2 id="how">How It Works</h2></div>
+    <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>Batch Dispatch</h4><p>Sends each destination its own block of posts, paced to avoid flood waits.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Webhook Channel Discovery</h4><p>Detects when the bot is made admin, so no manual Chat IDs are needed.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Workers KV State</h4><p>Keeps tenant pointers and access flags at the edge, looping back to the start when the source ends.</p></div></li></ol>
+  </section>
+
+  <section aria-labelledby="spec">
+    <div class="section-head"><h2 id="spec">Key Specs</h2></div>
+    <div class="specs-grid"><div class="spec-item"><span class="spec-key">Live Gateway</span><span class="spec-val">@OmniPost_Cloud_bot</span></div><div class="spec-item"><span class="spec-key">Fanout</span><span class="spec-val">1 source ➔ 5 channels</span></div><div class="spec-item"><span class="spec-key">Compute Core</span><span class="spec-val">Workers + KV</span></div><div class="spec-item"><span class="spec-key">Discovery</span><span class="spec-val">Zero-Config Webhook</span></div></div>
+  </section>
+
+  <section aria-labelledby="tech">
+    <div class="section-head"><h2 id="tech">Tech Stack</h2></div>
+    <div class="pill-stack"><span class="pill-micro">Cloudflare Workers</span><span class="pill-micro">Workers KV</span><span class="pill-micro">Telegram Bot API</span><span class="pill-micro">Dispatch Loop</span><span class="pill-micro">Tenant RBAC</span></div>
+  </section>
+
+  <section aria-labelledby="start">
+    <div class="section-head"><h2 id="start">Get Started</h2></div>
+    <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>Open the bot</h4><p>Tap the button above to open @OmniPost_Cloud_bot in Telegram.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Add it as an admin</h4><p>Make the bot an admin in your source channel and in each destination channel.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Channels are found automatically</h4><p>The bot detects each channel when it becomes admin, so there are no Chat IDs to copy.</p></div></li></ol>
+    <div class="cta-band"><a class="btn-action primary" href="https://t.me/OmniPost_Cloud_bot" target="_blank" rel="noopener noreferrer" data-tg="OmniPost_Cloud_bot">Open @OmniPost_Cloud_bot</a></div>
+  </section>
+
+  <section aria-labelledby="more">
+    <div class="section-head"><h2 id="more">More Projects</h2></div>
+    <div class="hero-cta-rack"><a class="btn-action" href="telegrowth.html">TeleGrowth Engine →</a><a class="btn-action" href="command-center.html">Command Center v5.0 →</a></div>
+  </section>
+
+  <footer class="app-footer">
+    <div>© 2026 Prabhu Labs • All rights reserved</div>
+    <div>Production infrastructure: <span>Cloudflare Edge V8</span></div>
+  </footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

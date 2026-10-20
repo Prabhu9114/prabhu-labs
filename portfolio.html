@@ -10,12 +10,14 @@
 <meta property="og:description" content="Telegram fanout, audience growth and MTProto automation systems built on Cloudflare Workers, KV and D1.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Prabhu Labs">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#07090e">
 <link rel="icon" href="logo.png">
 <link rel="canonical" href="https://prabhu-labs.in/portfolio">
 <meta property="og:url" content="https://prabhu-labs.in/portfolio">
-<meta property="og:image" content="https://prabhu-labs.in/logo.png">
+<meta property="og:image" content="https://prabhu-labs.in/og-portfolio.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -124,6 +126,7 @@
       <div class="drawer-top"><h2 id="t-omnipost">OmniPost <span>Cloud Architecture</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
       <div class="bot-callout"><div><h5>OmniPost Cloud Bot</h5><p>@OmniPost_Cloud_bot • Multi-Tenant Fanout</p></div><a href="https://t.me/OmniPost_Cloud_bot" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="OmniPost_Cloud_bot">Launch Bot<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></a></div>
       <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>Batch Dispatch</h4><p>Sends each destination its own block of posts, paced to avoid flood waits.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Webhook Channel Discovery</h4><p>Detects when the bot is made admin, so no manual Chat IDs are needed.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Workers KV State</h4><p>Keeps tenant pointers and access flags at the edge, looping back to the start when the source ends.</p></div></li></ol>
+      <a class="btn-launch" href="omnipost.html">Full details →</a>
     </div>
   </div>
   <div class="drawer-overlay" id="drawer-growth" role="dialog" aria-modal="true" aria-labelledby="t-growth" inert>
@@ -132,6 +135,7 @@
       <div class="drawer-top"><h2 id="t-growth">TeleGrowth <span>Engine Architecture</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
       <div class="bot-callout"><div><h5>Quick Join Master Bot</h5><p>@Quick_Join_Bot • Fast Approval Gateway</p></div><a href="https://t.me/Quick_Join_Bot" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="Quick_Join_Bot">Launch Bot<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></a></div>
       <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>Fast Approval</h4><p>Handles join requests through Cloudflare Workers webhooks.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Verification Hook</h4><p>An interactive challenge opens a two-way DM and sets the can_dm flag in the database.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Central D1 SQL Ledger</h4><p>Stores unified subscriber records in SQLite at the edge.</p></div></li></ol>
+      <a class="btn-launch" href="telegrowth.html">Full details →</a>
     </div>
   </div>
   <div class="drawer-overlay" id="drawer-cmd" role="dialog" aria-modal="true" aria-labelledby="t-cmd" inert>
@@ -140,6 +144,7 @@
       <div class="drawer-top"><h2 id="t-cmd">Command Center <span>v5.0 Architecture</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
       
       <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>MTProto Telethon Async</h4><p>Direct Telegram client connection that handles continuous feeds, with FloodWait-aware pacing.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Dynamic Queue Stagger</h4><p>Spreads posts across time slots within Telegram's 100 scheduled-message limit.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Cloud Log Sync</h4><p>Mirrors state and configuration into private Telegram log channels.</p></div></li></ol>
+      <a class="btn-launch" href="command-center.html">Full details →</a>
     </div>
   </div>
 </div>
