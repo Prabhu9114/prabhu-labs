@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="google-site-verification" content="xOoDM76F_64NhVbLQSdbQ8vplj_5hRjWDnlX9agB4EY" />
+<title>Contact • Prabhu Labs</title>
+<meta name="description" content="Send a message about a Telegram bot, automation or edge systems project.">
+<meta property="og:title" content="Contact — Prabhu Labs">
+<meta property="og:description" content="Send a message about a Telegram bot, automation or edge systems project.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prabhu Labs">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#07090e">
+<link rel="icon" href="logo.png">
+<link rel="canonical" href="https://prabhu-labs.in/contact">
+<meta property="og:url" content="https://prabhu-labs.in/contact">
+<meta property="og:image" content="https://prabhu-labs.in/og-home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-matrix" aria-hidden="true"></div>
+<div class="ambient-glow" aria-hidden="true"></div>
+<main class="app-shell">
+  <nav class="nav-bar" aria-label="Site">
+    <a class="nav-brand" href="index.html" aria-label="Prabhu Labs home">
+      <div class="nav-logo"><img src="logo.png" alt="" onerror="this.parentElement.textContent='PL'"></div>
+      <span class="nav-title">Prabhu <span>Labs</span></span>
+    </a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="portfolio.html">Portfolio</a><a href="contact.html" aria-current="page">Contact</a></div>
+    <div class="status-badge" role="status"><span class="status-pulse"></span><span>EDGE CLUSTER LIVE</span></div>
+  </nav>
+  <header class="page-head">
+    <div class="hero-kicker">CONTACT</div>
+    <h1 class="hero-title">Get In <span class="glow">Touch</span></h1>
+    <p class="hero-desc">Have a Telegram automation or edge systems project? Send a message below, or open the bot in Telegram.</p>
+  </header>
+
+  <section class="contact-card" aria-label="Contact form">
+    <div class="bot-callout">
+      <div><h5>Prabhu Labs Sentinel</h5><p>@prabhulabs_bot • Relay Gateway</p></div>
+      <a href="https://t.me/prabhulabs_bot" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="prabhulabs_bot">Open Telegram</a>
+    </div>
+    <form class="dispatch-form" id="concierge-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="contact-input">Contact</label>
+        <input type="text" id="contact-input" class="form-input" placeholder="@telegram_handle or user@email.com" maxlength="120" autocomplete="off" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="message-input">Message</label>
+        <textarea id="message-input" class="form-textarea" placeholder="Describe your inquiry, proposal, or systems request..." maxlength="1500" required></textarea>
+      </div>
+      <input type="text" name="website" id="hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" class="btn-submit" id="submit-btn">Send message</button>
+    </form>
+    <div class="form-receipt" id="form-receipt" role="status" aria-live="polite">
+      <div class="receipt-title" id="receipt-title"></div>
+      <p class="receipt-desc" id="receipt-desc"></p>
+    </div>
+  </section>
+  <footer class="app-footer">
+    <div>© 2026 Prabhu Labs • All rights reserved</div>
+    <div>Production infrastructure: <span>Cloudflare Edge V8</span></div>
+  </footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

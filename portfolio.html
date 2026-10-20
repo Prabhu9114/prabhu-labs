@@ -33,72 +33,61 @@
       <div class="nav-logo"><img src="logo.png" alt="" onerror="this.parentElement.textContent='PL'"></div>
       <span class="nav-title">Prabhu <span>Labs</span></span>
     </a>
-    <div class="nav-links"><a href="index.html">Home</a><a href="portfolio.html" aria-current="page">Portfolio</a></div>
+    <div class="nav-links"><a href="index.html">Home</a><a href="portfolio.html" aria-current="page">Portfolio</a><a href="contact.html">Contact</a></div>
     <div class="status-badge" role="status"><span class="status-pulse"></span><span>EDGE CLUSTER LIVE</span></div>
   </nav>
 
   <header class="page-head">
     <div class="hero-kicker">PORTFOLIO</div>
     <h1 class="hero-title">Engineered <span class="glow">Deployments</span></h1>
-    <p class="hero-desc">Three production systems. Tap a card for the architecture.</p>
+    <p class="hero-desc">Two public Telegram bots and one automation suite. Open any project for the full breakdown.</p>
   </header>
 
-  <section aria-label="Deployments">
-    <div class="deck" id="deck">
-  <article class="sys-card " id="omnipost" data-open="omnipost">
-    <div class="card-topbar">
-      <div class="card-head">
-        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="m13 13 3-3-3-3"/><path d="M16 10H8"/></svg></div>
-        <div>
-          <h3><button type="button" class="card-title-btn" data-open="omnipost" aria-haspopup="dialog">OmniPost Cloud</button></h3>
-          <div class="card-meta">
-            <span>Serverless Fanout</span>
-            <a class="tag-pill clickable-pill" href="https://t.me/OmniPost_Cloud_bot" target="_blank" rel="noopener noreferrer" data-tg="OmniPost_Cloud_bot">@OmniPost_Cloud_bot</a>
-          </div>
+  <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter projects" hidden>
+    <button type="button" class="chip active" data-f="all" aria-pressed="true">All</button>
+    <button type="button" class="chip" data-f="bots" aria-pressed="false">Bots</button>
+    <button type="button" class="chip" data-f="automation" aria-pressed="false">Automation</button>
+  </div>
+
+  <section aria-labelledby="bots-h" data-cat="bots">
+    <div class="section-head"><h2 id="bots-h">Telegram Bots</h2></div>
+    <div class="proj-grid two">
+      <article class="proj-card proj " id="omnipost">
+        <a href="omnipost.html" tabindex="-1" aria-hidden="true"><img src="og-omnipost.png" alt="OmniPost Cloud preview" width="1200" height="630" loading="lazy"></a>
+        <div class="pc-body">
+          <div class="pc-kicker">SERVERLESS FANOUT • TELEGRAM BOT</div>
+          <h3>OmniPost Cloud</h3>
+          <p>Multi-tenant Telegram channel fanout engine. Copies sequential post batches from a source channel to each destination, with per-channel pointers and rate-limit pacing.</p>
+          <div class="pill-stack"><span class="pill-micro">Cloudflare Workers</span><span class="pill-micro">Workers KV</span><span class="pill-micro">Telegram Bot API</span><span class="pill-micro">Tenant RBAC</span></div>
+          <div class="hero-cta-rack left"><a class="btn-action primary" href="omnipost.html">Full details</a><a class="btn-action" href="https://t.me/OmniPost_Cloud_bot" target="_blank" rel="noopener noreferrer" data-tg="OmniPost_Cloud_bot">Open @OmniPost_Cloud_bot</a></div>
         </div>
-      </div>
-      <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></div>
-    </div>
-    <p class="card-desc">Multi-tenant Telegram channel fanout engine. Copies sequential post batches from a source channel to each destination, with per-channel pointers and rate-limit pacing.</p>
-    <div class="specs-grid"><div class="spec-item"><span class="spec-key">Live Gateway</span><span class="spec-val" title="@OmniPost_Cloud_bot">@OmniPost_Cloud_bot</span></div><div class="spec-item"><span class="spec-key">Fanout</span><span class="spec-val" title="1 source ➔ 5 channels">1 source ➔ 5 channels</span></div><div class="spec-item"><span class="spec-key">Compute Core</span><span class="spec-val" title="Workers + KV">Workers + KV</span></div><div class="spec-item"><span class="spec-key">Discovery</span><span class="spec-val" title="Zero-Config Webhook">Zero-Config Webhook</span></div></div>
-    <div class="pill-stack"><span class="pill-micro">Cloudflare Workers</span><span class="pill-micro">Workers KV</span><span class="pill-micro">Telegram Bot API</span><span class="pill-micro">Dispatch Loop</span><span class="pill-micro">Tenant RBAC</span></div>
-  </article>
-  <article class="sys-card gold" id="growth" data-open="growth">
-    <div class="card-topbar">
-      <div class="card-head">
-        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
-        <div>
-          <h3><button type="button" class="card-title-btn" data-open="growth" aria-haspopup="dialog">TeleGrowth Engine</button></h3>
-          <div class="card-meta">
-            <span>Audience Engine</span>
-            <a class="tag-pill clickable-pill" href="https://t.me/Quick_Join_Bot" target="_blank" rel="noopener noreferrer" data-tg="Quick_Join_Bot">@Quick_Join_Bot</a>
-          </div>
+      </article>
+      <article class="proj-card proj gold" id="telegrowth">
+        <a href="telegrowth.html" tabindex="-1" aria-hidden="true"><img src="og-telegrowth.png" alt="TeleGrowth Engine preview" width="1200" height="630" loading="lazy"></a>
+        <div class="pc-body">
+          <div class="pc-kicker">AUDIENCE ENGINE • TELEGRAM BOT</div>
+          <h3>TeleGrowth Engine</h3>
+          <p>Join-request approval gateway with instant edge webhooks, interactive verification and central D1 SQL audience records.</p>
+          <div class="pill-stack"><span class="pill-micro">Cloudflare D1</span><span class="pill-micro">Fast Webhooks</span><span class="pill-micro">Inline Keyboards</span><span class="pill-micro">Reactions Engine</span></div>
+          <div class="hero-cta-rack left"><a class="btn-action primary" href="telegrowth.html">Full details</a><a class="btn-action" href="https://t.me/Quick_Join_Bot" target="_blank" rel="noopener noreferrer" data-tg="Quick_Join_Bot">Open @Quick_Join_Bot</a></div>
         </div>
-      </div>
-      <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></div>
+      </article>
     </div>
-    <p class="card-desc">Join-request approval gateway with instant edge webhooks, interactive verification, and central D1 SQL audience records.</p>
-    <div class="specs-grid"><div class="spec-item"><span class="spec-key">Live Gateway</span><span class="spec-val" title="@Quick_Join_Bot">@Quick_Join_Bot</span></div><div class="spec-item"><span class="spec-key">Approval</span><span class="spec-val" title="Edge webhook">Edge webhook</span></div><div class="spec-item"><span class="spec-key">Database</span><span class="spec-val" title="Cloudflare D1 (SQL)">Cloudflare D1 (SQL)</span></div><div class="spec-item"><span class="spec-key">DM Flag</span><span class="spec-val" title="can_dm = 1">can_dm = 1</span></div></div>
-    <div class="pill-stack"><span class="pill-micro">Cloudflare D1</span><span class="pill-micro">Fast Webhooks</span><span class="pill-micro">Inline Keyboards</span><span class="pill-micro">Retention Loops</span><span class="pill-micro">Reactions Engine</span></div>
-  </article>
-  <article class="sys-card lime" id="cmd" data-open="cmd">
-    <div class="card-topbar">
-      <div class="card-head">
-        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
-        <div>
-          <h3><button type="button" class="card-title-btn" data-open="cmd" aria-haspopup="dialog">Command Center v5.0</button></h3>
-          <div class="card-meta">
-            <span>MTProto Automation</span>
-            <span class="tag-pill">Telethon Core</span>
-          </div>
+  </section>
+
+  <section aria-labelledby="auto-h" data-cat="automation">
+    <div class="section-head"><h2 id="auto-h">Automation Suites</h2></div>
+    <div class="proj-grid">
+      <article class="proj-card proj lime" id="command-center">
+        <a href="command-center.html" tabindex="-1" aria-hidden="true"><img src="og-command-center.png" alt="Command Center v5.0 preview" width="1200" height="630" loading="lazy"></a>
+        <div class="pc-body">
+          <div class="pc-kicker">MTPROTO AUTOMATION • TELETHON</div>
+          <h3>Command Center v5.0</h3>
+          <p>MTProto automation suite for high-volume content operations: multi-source feeds, link conversion and staggered scheduling.</p>
+          <div class="pill-stack"><span class="pill-micro">Python 3</span><span class="pill-micro">Telethon Async</span><span class="pill-micro">Linux CLI</span><span class="pill-micro">State Mirroring</span></div>
+          <div class="hero-cta-rack left"><a class="btn-action primary" href="command-center.html">Full details</a></div>
         </div>
-      </div>
-      <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></div>
-    </div>
-    <p class="card-desc">MTProto automation suite for high-volume content operations: multi-source feeds, link conversion, and staggered scheduling.</p>
-    <div class="specs-grid"><div class="spec-item"><span class="spec-key">Engine Core</span><span class="spec-val" title="Telethon Async">Telethon Async</span></div><div class="spec-item"><span class="spec-key">Queue Stagger</span><span class="spec-val" title="100-Post Safe Slot">100-Post Safe Slot</span></div><div class="spec-item"><span class="spec-key">Link Converter</span><span class="spec-val" title="TeraBox & Diskwala">TeraBox & Diskwala</span></div><div class="spec-item"><span class="spec-key">Recovery</span><span class="spec-val" title="Encrypted Log Sync">Encrypted Log Sync</span></div></div>
-    <div class="pill-stack"><span class="pill-micro">Python 3</span><span class="pill-micro">Telethon Async</span><span class="pill-micro">Linux CLI</span><span class="pill-micro">Diskwala API</span><span class="pill-micro">State Mirroring</span></div>
-  </article>
+      </article>
     </div>
   </section>
 
@@ -110,7 +99,7 @@
   </section>
 
   <section class="cta-band" aria-label="Contact">
-    <a class="btn-action primary" href="index.html#contact">Work With Me</a>
+    <a class="btn-action primary" href="contact.html">Work With Me</a>
   </section>
 
   <footer class="app-footer">
@@ -119,37 +108,12 @@
   </footer>
 </main>
 
-<div id="drawers">
-  <div class="drawer-overlay" id="drawer-omnipost" role="dialog" aria-modal="true" aria-labelledby="t-omnipost" inert>
-    <div class="drawer-card ">
-      <div class="drawer-grip"></div>
-      <div class="drawer-top"><h2 id="t-omnipost">OmniPost <span>Cloud Architecture</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
-      <div class="bot-callout"><div><h5>OmniPost Cloud Bot</h5><p>@OmniPost_Cloud_bot • Multi-Tenant Fanout</p></div><a href="https://t.me/OmniPost_Cloud_bot" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="OmniPost_Cloud_bot">Launch Bot<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></a></div>
-      <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>Batch Dispatch</h4><p>Sends each destination its own block of posts, paced to avoid flood waits.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Webhook Channel Discovery</h4><p>Detects when the bot is made admin, so no manual Chat IDs are needed.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Workers KV State</h4><p>Keeps tenant pointers and access flags at the edge, looping back to the start when the source ends.</p></div></li></ol>
-      <a class="btn-launch" href="omnipost.html">Full details →</a>
-    </div>
-  </div>
-  <div class="drawer-overlay" id="drawer-growth" role="dialog" aria-modal="true" aria-labelledby="t-growth" inert>
-    <div class="drawer-card gold">
-      <div class="drawer-grip"></div>
-      <div class="drawer-top"><h2 id="t-growth">TeleGrowth <span>Engine Architecture</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
-      <div class="bot-callout"><div><h5>Quick Join Master Bot</h5><p>@Quick_Join_Bot • Fast Approval Gateway</p></div><a href="https://t.me/Quick_Join_Bot" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="Quick_Join_Bot">Launch Bot<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></a></div>
-      <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>Fast Approval</h4><p>Handles join requests through Cloudflare Workers webhooks.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Verification Hook</h4><p>An interactive challenge opens a two-way DM and sets the can_dm flag in the database.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Central D1 SQL Ledger</h4><p>Stores unified subscriber records in SQLite at the edge.</p></div></li></ol>
-      <a class="btn-launch" href="telegrowth.html">Full details →</a>
-    </div>
-  </div>
-  <div class="drawer-overlay" id="drawer-cmd" role="dialog" aria-modal="true" aria-labelledby="t-cmd" inert>
-    <div class="drawer-card lime">
-      <div class="drawer-grip"></div>
-      <div class="drawer-top"><h2 id="t-cmd">Command Center <span>v5.0 Architecture</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
-      
-      <ol class="steps"><li class="step"><div class="step-num">01</div><div><h4>MTProto Telethon Async</h4><p>Direct Telegram client connection that handles continuous feeds, with FloodWait-aware pacing.</p></div></li><li class="step"><div class="step-num">02</div><div><h4>Dynamic Queue Stagger</h4><p>Spreads posts across time slots within Telegram's 100 scheduled-message limit.</p></div></li><li class="step"><div class="step-num">03</div><div><h4>Cloud Log Sync</h4><p>Mirrors state and configuration into private Telegram log channels.</p></div></li></ol>
-      <a class="btn-launch" href="command-center.html">Full details →</a>
-    </div>
-  </div>
-</div>
-
-
+<script>
+(function(){var bar=document.getElementById('filter-bar');if(!bar)return;bar.hidden=false;
+bar.addEventListener('click',function(e){var b=e.target.closest('[data-f]');if(!b)return;
+bar.querySelectorAll('.chip').forEach(function(c){var on=c===b;c.classList.toggle('active',on);c.setAttribute('aria-pressed',on)});
+document.querySelectorAll('[data-cat]').forEach(function(s){s.hidden=!(b.dataset.f==='all'||s.dataset.cat===b.dataset.f)})})})();
+</script>
 <script src="app.js"></script>
 </body>
 </html>
