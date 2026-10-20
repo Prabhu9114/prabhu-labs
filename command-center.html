@@ -44,6 +44,9 @@
     <div class="hero-cta-rack"><a class="btn-action primary" href="index.html#contact">Request a similar system</a></div>
   </header>
 
+  <section aria-labelledby="glance"><div class="section-head"><h2 id="glance">At A Glance</h2></div>
+    <div class="specs-grid three"><div class="spec-item"><span class="spec-key">What</span><span class="spec-val">Automates high-volume Telegram content work.</span></div><div class="spec-item"><span class="spec-key">Stack</span><span class="spec-val">Python • Telethon</span></div><div class="spec-item"><span class="spec-key">Type</span><span class="spec-val">Custom automation suite</span></div></div></section>
+
   <section aria-labelledby="prob">
     <div class="section-head"><h2 id="prob">The Problem</h2></div>
     <p class="prose">High-volume content work means juggling many source feeds, converting links, and scheduling posts without tripping Telegram’s limits.</p>
@@ -52,6 +55,10 @@
   <section aria-labelledby="sol">
     <div class="section-head"><h2 id="sol">The Solution</h2></div>
     <p class="prose">Command Center v5.0 connects directly over MTProto and handles multi-source feeds, link conversion and staggered scheduling in one suite, with FloodWait-aware pacing and state mirrored to private log channels.</p>
+  </section>
+
+  <section aria-labelledby="arch"><div class="section-head"><h2 id="arch">Architecture</h2></div>
+    <svg class="diagram" viewBox="0 0 360 450" role="img" aria-label="Command Center flow: feeds, Telethon engine, link converter, scheduler, log channels" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" style="fill:var(--c)"/></marker></defs><rect x="30" y="10" width="300" height="62" rx="14" style="fill:var(--card-bg);stroke:var(--line)" stroke-width="1.5"/><text x="180" y="37" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--text)">Source feeds</text><text x="180" y="57" text-anchor="middle" font-size="12" style="fill:var(--muted)">multi-source input</text><line x1="180" y1="72" x2="180" y2="96" style="stroke:var(--c)" stroke-width="2" marker-end="url(#a)"/><rect x="30" y="102" width="300" height="62" rx="14" style="fill:var(--t);stroke:var(--c)" stroke-width="1.5"/><text x="180" y="129" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--text)">Telethon MTProto engine</text><text x="180" y="149" text-anchor="middle" font-size="12" style="fill:var(--muted)">FloodWait-aware pacing</text><line x1="180" y1="164" x2="180" y2="188" style="stroke:var(--c)" stroke-width="2" marker-end="url(#a)"/><rect x="30" y="194" width="300" height="62" rx="14" style="fill:var(--card-bg);stroke:var(--line)" stroke-width="1.5"/><text x="180" y="221" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--text)">Link converter</text><text x="180" y="241" text-anchor="middle" font-size="12" style="fill:var(--muted)">TeraBox • Diskwala</text><line x1="180" y1="256" x2="180" y2="280" style="stroke:var(--c)" stroke-width="2" marker-end="url(#a)"/><rect x="30" y="286" width="300" height="62" rx="14" style="fill:var(--card-bg);stroke:var(--line)" stroke-width="1.5"/><text x="180" y="313" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--text)">Staggered scheduler</text><text x="180" y="333" text-anchor="middle" font-size="12" style="fill:var(--muted)">100-post safe slots</text><line x1="180" y1="348" x2="180" y2="372" style="stroke:var(--c)" stroke-width="2" marker-end="url(#a)"/><rect x="30" y="378" width="300" height="62" rx="14" style="fill:var(--card-bg);stroke:var(--line)" stroke-width="1.5"/><text x="180" y="405" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--text)">Private log channels</text><text x="180" y="425" text-anchor="middle" font-size="12" style="fill:var(--muted)">state and config mirror</text></svg>
   </section>
 
   <section aria-labelledby="how">
