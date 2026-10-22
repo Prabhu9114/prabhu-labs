@@ -1,140 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="google-site-verification" content="xOoDM76F_64NhVbLQSdbQ8vplj_5hRjWDnlX9agB4EY" />
-<title>Prabhu Labs • Telegram Bots &amp; Edge Automation</title>
-<meta name="description" content="Telegram bots for channel owners: post to many channels and approve join requests instantly. Built on Cloudflare’s edge.">
-<meta property="og:title" content="Prabhu Labs — Telegram Bots &amp; Edge Automation">
-<meta property="og:description" content="Telegram bots for channel owners: post to many channels and approve join requests instantly. Built on Cloudflare’s edge.">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Prabhu Labs">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#07090e">
-<link rel="icon" href="/logo.png">
-<link rel="canonical" href="https://prabhu-labs.in/">
-<meta property="og:url" content="https://prabhu-labs.in/">
-<meta property="og:image" content="https://prabhu-labs.in/og-home.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>Prabhu Labs</title>
+  <meta name="title" content="Prabhu Labs">
+  <meta name="description" content="Official project hub and showcase for Prabhu Labs automations, bots, and tools.">
+
+  <!-- Open Graph / Telegram / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.prabhu-labs.in/">
+  <meta property="og:title" content="Prabhu Labs">
+  <meta property="og:description" content="Official project hub and showcase for Prabhu Labs automations, bots, and tools.">
+  <meta property="og:image" content="https://www.prabhu-labs.in/logo.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://www.prabhu-labs.in/">
+  <meta property="twitter:title" content="Prabhu Labs">
+  <meta property="twitter:description" content="Official project hub and showcase for Prabhu Labs automations, bots, and tools.">
+  <meta property="twitter:image" content="https://www.prabhu-labs.in/logo.png">
+
+  <!-- Performance & Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Prabhu Labs",
+    "url": "https://www.prabhu-labs.in/"
+  }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: #080d1a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* Profile Header */
+    .profile-section {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid #00e5ff;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+      object-fit: cover;
+      margin-bottom: 16px;
+      aspect-ratio: 1 / 1;
+    }
+
+    .title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+
+    /* Cards */
+    .card {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 229, 255, 0.4);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 20px;
+      background: rgba(0, 229, 255, 0.1);
+      color: #00e5ff;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      font-weight: 600;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #f8fafc;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    /* Actions */
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: #00e5ff;
+      color: #080d1a;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: #33ebff;
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+    }
+
+    .btn-outline {
+      background: rgba(0, 229, 255, 0.08);
+      border: 1px solid #00e5ff;
+      color: #00e5ff;
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 229, 255, 0.18);
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .modal-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: 85vh;
+      background: #0f172a;
+      border: 1px solid #00e5ff;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 18px;
+      border-bottom: 1px solid #1e293b;
+      background: #090e1a;
+    }
+
+    .modal-header span {
+      color: #00e5ff;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.6rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-close-btn:hover {
+      color: #ffffff;
+    }
+
+    .pdf-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #1e293b;
+    }
+  </style>
 </head>
 <body>
-<div class="bg-matrix" aria-hidden="true"></div>
-<div class="ambient-glow" aria-hidden="true"></div>
-<main class="app-shell">
-  <nav class="nav-bar" aria-label="Site">
-    <a class="nav-brand" href="/" aria-label="Prabhu Labs home">
-      <div class="nav-logo"><img src="/logo.png" alt="" onerror="this.parentElement.textContent='PL'"></div>
-      <span class="nav-title">Prabhu <span>Labs</span></span>
-    </a>
-    <div class="nav-links"><a href="/" aria-current="page">Home</a><a href="/portfolio">Portfolio</a><a href="/contact">Contact</a></div>
-    <div class="status-badge" role="status"><span class="status-pulse"></span><span>ON CLOUDFLARE EDGE</span></div>
-  </nav>
 
-  <header class="hero-panel">
-    <div class="avatar-halo"><div class="avatar-inner"><img src="/logo.png" alt="Prabhu Labs logo" onerror="this.style.display='none'"></div></div>
-    <div class="hero-kicker">EDGE ARCHITECTURE • TELEGRAM SYSTEMS</div>
-    <h1 class="hero-title">Prabhu <span class="glow">Labs</span></h1>
-    <p class="hero-desc">Telegram bots that post to many channels and approve join requests instantly, plus automation suites for high-volume content work. Built on Cloudflare’s edge.</p>
-    <div class="hero-cta-rack">
-      <a class="btn-action primary" href="#bots">Try the Bots</a>
-      <a class="btn-action" href="/portfolio">Portfolio</a>
-    </div>
-  </header>
+  <main class="container">
+    <!-- Header Section -->
+    <header class="profile-section">
+      <img src="logo.png" alt="Prabhu Labs Logo" class="avatar" width="100" height="100" loading="eager" fetchpriority="high">
+      <h1 class="title">Prabhu Labs</h1>
+      <p class="subtitle">Cloud Solutions, Telegram Automation & System Tools</p>
+    </header>
 
-  <section id="bots" aria-labelledby="bots-h">
-    <div class="section-head"><h2 id="bots-h">Try The Bots</h2></div>
-    <div class="feature-grid two">
-      <div class="feature">
-        <h3>OmniPost Cloud</h3>
-        <p>Copy posts from one Telegram channel to many, in order and at a safe pace.</p>
-        <div class="hero-cta-rack left"><a class="btn-action primary" href="https://t.me/OmniPost_Cloud_bot" target="_blank" rel="noopener noreferrer" data-tg="OmniPost_Cloud_bot">Open @OmniPost_Cloud_bot</a><a class="btn-action" href="/omnipost">Details</a></div>
+    <!-- OmniPost Bot Card -->
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">OmniPost Bot</h2>
+        <span class="badge">Automation</span>
       </div>
-      <div class="feature gold">
-        <h3>TeleGrowth Engine</h3>
-        <p>Approve channel join requests instantly and keep a record of who you can message.</p>
-        <div class="hero-cta-rack left"><a class="btn-action primary" href="https://t.me/Quick_Join_Bot" target="_blank" rel="noopener noreferrer" data-tg="Quick_Join_Bot">Open @Quick_Join_Bot</a><a class="btn-action" href="/telegrowth">Details</a></div>
+      <p class="card-desc">
+        Automated multi-channel Telegram broadcasting, scheduled feeds, and command-center management tools.
+      </p>
+      <div class="card-actions">
+        <!-- Interactive PDF Trigger Button -->
+        <button type="button" class="btn btn-outline" onclick="openPdfModal()">
+          📄 View Guide (PDF)
+        </button>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <section aria-label="Numbers">
-    <div class="specs-grid three">
-      <div class="stat"><b>3</b><span>production systems</span></div>
-      <div class="stat"><b>2</b><span>public Telegram bots</span></div>
-      <div class="stat"><b>5</b><span>channels per fanout</span></div>
-    </div>
-  </section>
-
-  <section aria-labelledby="what-h">
-    <div class="section-head"><h2 id="what-h">What I Build</h2></div>
-    <div class="feature-grid">
-      <div class="feature"><h3>Edge-native bots</h3><p>Telegram bots on Cloudflare Workers and KV, with no servers to maintain.</p></div>
-      <div class="feature"><h3>Audience data</h3><p>Join approvals, verification and subscriber records kept in D1 SQL at the edge.</p></div>
-      <div class="feature"><h3>Content automation</h3><p>Python and Telethon pipelines for scheduling, link conversion and multi-channel posting.</p></div>
-    </div>
-  </section>
-
-    <section aria-labelledby="how-h">
-    <div class="section-head"><h2 id="how-h">How It Works</h2></div>
-    <ol class="steps">
-      <li class="step"><div class="step-num">01</div><div><h4>Open a bot</h4><p>Tap a bot above to open it in Telegram.</p></div></li>
-      <li class="step"><div class="step-num">02</div><div><h4>Add it as an admin</h4><p>Make the bot an admin of your channel so it can work there.</p></div></li>
-      <li class="step"><div class="step-num">03</div><div><h4>It runs on the edge</h4><p>The bot works on Cloudflare’s network, with no server for you to manage.</p></div></li>
-    </ol>
-  </section>
-
-  <section class="cta-band" aria-label="Portfolio">
-    <p class="about-p">Want the full breakdown of every system?</p>
-    <a class="btn-action primary" href="/portfolio">See The Full Portfolio</a>
-  </section>
-
-  <section class="cta-band" id="contact" aria-labelledby="contact-h">
-    <div class="section-head" style="width:100%"><h2 id="contact-h">Get In Touch</h2></div>
-    <p class="about-p">Have a Telegram automation or edge systems project? Send a message through the concierge desk.</p>
-    <button class="btn-action primary" data-open="desk">Open Concierge Desk</button>
-  </section>
-
-  <footer class="app-footer">
-    <div>© 2026 Prabhu Labs • All rights reserved</div>
-    <div>Production infrastructure: <span>Cloudflare Edge V8</span></div>
-  </footer>
-</main>
-
-<div class="drawer-overlay" id="drawer-desk" role="dialog" aria-modal="true" aria-labelledby="t-desk" inert>
-  <div class="drawer-card">
-    <div class="drawer-grip"></div>
-    <div class="drawer-top"><h2 id="t-desk">Admin <span>Concierge Desk</span></h2><button class="btn-close" data-close aria-label="Close">✕</button></div>
-    <div class="bot-callout">
-      <div><h5>Prabhu Labs Sentinel</h5><p>@prabhulabs_bot • Relay Gateway</p></div>
-      <a href="https://t.me/prabhulabs_bot" target="_blank" rel="noopener noreferrer" class="btn-launch" data-tg="prabhulabs_bot">Open Telegram</a>
-    </div>
-    <form class="dispatch-form" id="concierge-form" novalidate>
-      <div class="form-group">
-        <label class="form-label" for="contact-input">Contact</label>
-        <input type="text" id="contact-input" class="form-input" placeholder="@telegram_handle or user@email.com" maxlength="120" autocomplete="off" required>
+  <!-- In-Browser PDF Modal Viewer -->
+  <div id="pdfModal" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <span>OmniPost Bot - User Documentation</span>
+        <button type="button" class="modal-close-btn" onclick="closePdfModal()">&times;</button>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="message-input">Message</label>
-        <textarea id="message-input" class="form-textarea" placeholder="Describe your inquiry, proposal, or systems request..." maxlength="1500" required></textarea>
-      </div>
-      <input type="text" name="website" id="hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <button type="submit" class="btn-submit" id="submit-btn">Send message</button>
-    </form>
-    <div class="form-receipt" id="form-receipt" role="status" aria-live="polite">
-      <div class="receipt-title" id="receipt-title"></div>
-      <p class="receipt-desc" id="receipt-desc"></p>
+      <iframe src="/Omnipost-guide.pdf#toolbar=1" class="pdf-frame" title="OmniPost User Guide"></iframe>
     </div>
   </div>
-</div>
 
+  <script>
+    function openPdfModal() {
+      document.getElementById('pdfModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
 
-<script src="/app.js"></script>
+    function closePdfModal() {
+      document.getElementById('pdfModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    window.addEventListener('click', function(e) {
+      const modal = document.getElementById('pdfModal');
+      if (e.target === modal) {
+        closePdfModal();
+      }
+    });
+
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePdfModal();
+      }
+    });
+  </script>
 </body>
 </html>
